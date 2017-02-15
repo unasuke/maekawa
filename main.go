@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -8,6 +9,16 @@ import (
 )
 
 func main() {
+	var apply bool
+	var dryrun bool
+
+	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
+	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
+	flag.Parse()
+
+	fmt.Println(apply)
+	fmt.Println(dryrun)
+
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
