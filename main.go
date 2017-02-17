@@ -15,8 +15,8 @@ func main() {
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
-	flag.StringVar(&file, "file", "", "file path to setting yaml")
-	flag.StringVar(&file, "f", "", "file path to setting yaml (shorthand)")
+	flag.StringVar(&file, "file", "config.yml", "file path to setting yaml")
+	flag.StringVar(&file, "f", "config.yml", "file path to setting yaml (shorthand)")
 	flag.Parse()
 
 	sess, err := session.NewSession(nil)
