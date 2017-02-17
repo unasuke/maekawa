@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
+
+	yaml "gopkg.in/yaml.v2"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
@@ -24,14 +27,24 @@ func main() {
 		fmt.Errorf("Error %v", err)
 	}
 
-	cwe := cloudwatchevents.New(sess)
-	result, err := cwe.ListRules(nil)
-
+	rules := Rules{}
+	err := loadYaml(file, &rules)
 	if err != nil {
-		fmt.Println("Error", err)
-
-	} else {
-		fmt.Println("Success")
-		fmt.Println(result)
+		return err
 	}
+}
+
+func loadYaml(file string, r *Rules) error {
+
+	buf, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+
+	err = yaml.Unmarshal(buf, &r)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
