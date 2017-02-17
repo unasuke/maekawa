@@ -19,9 +19,10 @@ func main() {
 	fmt.Println(apply)
 	fmt.Println(dryrun)
 
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	sess, err := session.NewSession(nil)
+	if err != nil {
+		fmt.Errorf("Error %v", err)
+	}
 
 	cwe := cloudwatchevents.New(sess)
 	result, err := cwe.ListRules(nil)
