@@ -11,13 +11,13 @@ import (
 func main() {
 	var apply bool
 	var dryrun bool
+	var file string
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
+	flag.StringVar(&file, "file", "", "file path to setting yaml")
+	flag.StringVar(&file, "f", "", "file path to setting yaml (shorthand)")
 	flag.Parse()
-
-	fmt.Println(apply)
-	fmt.Println(dryrun)
 
 	sess, err := session.NewSession(nil)
 	if err != nil {
