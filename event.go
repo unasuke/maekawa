@@ -27,3 +27,9 @@ func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, des
 	}
 	return (matchCount / Elements)
 }
+
+// return true when rule is new defined in yaml configration file
+// judgemant by name(arn)
+func IsNewDefinedRule(cweRule cloudwatchevents.Rule, describedRule Rule) bool {
+	return *cweRule.Name != describedRule.Name
+}
