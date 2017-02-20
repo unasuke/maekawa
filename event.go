@@ -5,6 +5,27 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
+// return ClowdWatchEvent rule best matched one by yaml descripbed rule.
+func fetchCWEventRuleFromDescribedRule(client *cloudwatchevents.CloudWatchEvents, describedRule Rule) (cloudwatchevents.Rule, error) {
+	var bestMatchedRule cloudwatchevents.Rule
+	var score float64
+
+	resp, err := client.ListRules(nil)
+	if err != nil {
+		return bestMatchedRule, err
+	}
+
+	for _, rule := range resp.Rules {
+		var s = MatchScoreForCWEventRuleAndDescribedRule(*rule, describedRule)
+
+		if score < s {
+			bestMatchedRule = *rule
+			score = s
+		}
+	}
+	return bestMatchedRule, nil
+}
+
 // return match score ClowdWatchEvent rule and descripbed rule.
 func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, describedRule Rule) float64 {
 	const Elements = 5.0
