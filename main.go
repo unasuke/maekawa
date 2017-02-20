@@ -34,6 +34,11 @@ func main() {
 		fmt.Errorf("Session error %v", errS)
 	}
 
+	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
+	if errR != nil {
+		fmt.Errorf("API error %v", errR)
+	}
+
 	describedRules := Rules{}
 	errY := loadYaml(file, &describedRules)
 	if errY != nil {
