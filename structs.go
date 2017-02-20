@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+)
+
 type Rules struct {
 	Rules []Rule
 }
@@ -11,6 +15,8 @@ type Rule struct {
 	ScheduleExpression string           `yaml:"schedule_expression"`
 	State              string           `yaml:"state"`
 	LambdaFunctions    []LambdaFunction `yaml:"lambda_functions"`
+	ActualRule         cloudwatchevents.Rule
+	NeedUpdate         bool
 }
 
 type LambdaFunction struct {
