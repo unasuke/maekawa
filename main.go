@@ -7,6 +7,7 @@ import (
 
 	yaml "gopkg.in/yaml.v2"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
@@ -15,16 +16,22 @@ func main() {
 	var apply bool
 	var dryrun bool
 	var file string
+	var awsRegion string
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
 	flag.StringVar(&file, "file", "config.yml", "file path to setting yaml")
 	flag.StringVar(&file, "f", "config.yml", "file path to setting yaml (shorthand)")
+	flag.StringVar(&awsRegion, "region", "", "aws region")
 	flag.Parse()
 
-	sess, err := session.NewSession(nil)
-	if err != nil {
-		fmt.Errorf("Error %v", err)
+	sess, errS := session.NewSession(
+		&aws.Config{
+			Region: aws.String(awsRegion),
+		},
+	)
+	if errS != nil {
+		fmt.Errorf("Session error %v", errS)
 	}
 
 	rules := Rules{}
