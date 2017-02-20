@@ -34,10 +34,10 @@ func main() {
 		fmt.Errorf("Session error %v", errS)
 	}
 
-	rules := Rules{}
-	err := loadYaml(file, &rules)
-	if err != nil {
-		return err
+	describedRules := Rules{}
+	errY := loadYaml(file, &describedRules)
+	if errY != nil {
+		fmt.Errorf("File error %v", errY)
 	}
 }
 
