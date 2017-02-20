@@ -13,10 +13,10 @@ import (
 )
 
 func main() {
-	var apply bool
-	var dryrun bool
-	var file string
-	var awsRegion string
+	var (
+		apply, dryrun   bool
+		file, awsRegion string
+	)
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
