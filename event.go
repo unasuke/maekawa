@@ -26,8 +26,8 @@ func fetchCWEventRuleFromDescribedRule(client *cloudwatchevents.CloudWatchEvents
 }
 
 // fetch ClowdWatchEvent target by Rule.ActualRule
-func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules *Rules) error {
-	for i, rule := range rules.Rules {
+func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules []Rule) error {
+	for i, rule := range rules {
 		if rule.ActualRule.Name == nil {
 			continue
 		}
@@ -37,7 +37,7 @@ func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules 
 		if err != nil {
 			return err
 		}
-		rules.Rules[i].ActualTargets = targets.Targets
+		rules[i].ActualTargets = targets.Targets
 	}
 	return nil
 }
