@@ -78,3 +78,29 @@ func TestIsNewDefinedRule(t *testing.T) {
 		t.Error("return value should be true")
 	}
 }
+
+func TestCompareString(t *testing.T) {
+	string1 := "string"
+	string2 := "sutoringu"
+	string3 := ""
+
+	if !CompareString(&string1, &string1) {
+		t.Errorf("should true 'string' == 'string'")
+	}
+
+	if CompareString(&string1, &string2) {
+		t.Errorf("should false 'string' == 'sutoringu'")
+	}
+
+	if CompareString(&string1, nil) {
+		t.Errorf("should false 'string' == nil")
+	}
+
+	if !CompareString(nil, &string3) {
+		t.Errorf("should true nil == ''")
+	}
+
+	if !CompareString(nil, nil) {
+		t.Errorf("should true nil == nil")
+	}
+}

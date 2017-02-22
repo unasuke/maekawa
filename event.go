@@ -54,3 +54,22 @@ func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, des
 func IsNewDefinedRule(cweRule cloudwatchevents.Rule, describedRule Rule) bool {
 	return *cweRule.Name != describedRule.Name
 }
+
+// compare strings
+// nil and empty string are same value
+func CompareString(a, b *string) bool {
+	if a == nil || *a == "" {
+		if b == nil || *b == "" {
+			return true
+		} else {
+			return false
+		}
+	} else if b == nil || *b == "" {
+		if a == nil || *a == "" {
+			return true
+		} else {
+			return false
+		}
+	}
+	return *a == *b
+}
