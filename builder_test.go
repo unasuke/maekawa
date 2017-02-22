@@ -83,3 +83,47 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 		t.Errorf("should deleted second rule(index is 1)")
 	}
 }
+
+func TestJudgeRuleNeedUpdate(t *testing.T) {
+	rule1 := Rule{
+		Description:        "Test rule 1",
+		EventPattern:       "",
+		Name:               "test-1",
+		ScheduleExpression: "cron(0 20 * * ? *)",
+		State:              "ENABLED",
+		ActualRule: cloudwatchevents.Rule{
+			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-1"),
+			Description:        aws.String("Test rule 1"),
+			EventPattern:       nil,
+			Name:               aws.String("test-1"),
+			RoleArn:            nil,
+			ScheduleExpression: aws.String("cron(0 20 * * ? *)"),
+			State:              aws.String("ENABLED"),
+		},
+	}
+	JudgeRuleNeedUpdate(&rule1)
+	if rule1.NeedUpdate != false {
+		t.Errorf("rule1 shouldn't need update")
+	}
+
+	rule2 := Rule{
+		Description:        "Test rule 2",
+		EventPattern:       "",
+		Name:               "test-2",
+		ScheduleExpression: "cron(0 20 * * ? *)",
+		State:              "ENABLED",
+		ActualRule: cloudwatchevents.Rule{
+			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-2"),
+			Description:        aws.String("Test rule 2"),
+			EventPattern:       nil,
+			Name:               aws.String("test-2"),
+			RoleArn:            nil,
+			ScheduleExpression: aws.String("rate(1 day)"),
+			State:              aws.String("ENABLED"),
+		},
+	}
+	JudgeRuleNeedUpdate(&rule2)
+	if rule2.NeedUpdate != true {
+		t.Errorf("rule2 should need update")
+	}
+}

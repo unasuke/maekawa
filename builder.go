@@ -30,3 +30,15 @@ func DeleteRuleFromSlice(src []*cloudwatchevents.Rule, deleteIndex int) []*cloud
 	}
 	return dest
 }
+
+// judge is rule need update
+// compare rule and ActualRule
+func JudgeRuleNeedUpdate(r *Rule) {
+	if !CompareString(&r.Name, r.ActualRule.Name) ||
+		!CompareString(&r.Description, r.ActualRule.Description) ||
+		!CompareString(&r.EventPattern, r.ActualRule.EventPattern) ||
+		!CompareString(&r.ScheduleExpression, r.ActualRule.ScheduleExpression) ||
+		!CompareString(&r.State, r.ActualRule.State) {
+		r.NeedUpdate = true
+	}
+}
