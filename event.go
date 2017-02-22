@@ -26,6 +26,20 @@ func fetchCWEventRuleFromDescribedRule(client *cloudwatchevents.CloudWatchEvents
 	return bestMatchedRule, nil
 }
 
+// fetch ClowdWatchEvent target by Rule.ActualRule
+func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules *Rules) error {
+	for i, rule := range rules.Rules {
+		targets, err := client.ListTargetsByRule(&cloudwatchevents.ListTargetsByRuleInput{
+			Rule: aws.String(rule.Name),
+		})
+		if err != nil {
+			return err
+		}
+		rules.Rules[i].ActualTargets = targets.Targets
+	}
+	return nil
+}
+
 // return match score ClowdWatchEvent rule and descripbed rule.
 func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, describedRule Rule) float64 {
 	const Elements = 5.0

@@ -16,7 +16,7 @@ type Rule struct {
 	State              string           `yaml:"state"`
 	LambdaFunctions    []LambdaFunction `yaml:"lambda_functions"`
 	ActualRule         cloudwatchevents.Rule
-	ActualTargets      []cloudwatchevents.Target
+	ActualTargets      []*cloudwatchevents.Target
 	NeedUpdate         bool
 }
 
