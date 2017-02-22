@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
@@ -30,7 +29,7 @@ func fetchCWEventRuleFromDescribedRule(client *cloudwatchevents.CloudWatchEvents
 func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules *Rules) error {
 	for i, rule := range rules.Rules {
 		targets, err := client.ListTargetsByRule(&cloudwatchevents.ListTargetsByRuleInput{
-			Rule: aws.String(rule.Name),
+			Rule: rule.ActualRule.Name,
 		})
 		if err != nil {
 			return err
