@@ -24,7 +24,7 @@ func TestMatchScoreForCWEventRuleAndDescribedRule(t *testing.T) {
 		Name:               "test-cwevent",
 		ScheduleExpression: "cron(0 20 * * ? *)",
 		State:              "ENABLED",
-		LambdaFunctions:    nil,
+		Targets:            nil,
 	}
 
 	result1 := MatchScoreForCWEventRuleAndDescribedRule(cweventRule, describedRule)
@@ -56,7 +56,7 @@ func TestIsNewDefinedRule(t *testing.T) {
 		Name:               "test-cwevent",
 		ScheduleExpression: "cron(0 20 * * ? *)",
 		State:              "ENABLED",
-		LambdaFunctions:    nil,
+		Targets:            nil,
 	}
 
 	result1 := IsNewDefinedRule(cweventRule, rule1)
@@ -70,7 +70,7 @@ func TestIsNewDefinedRule(t *testing.T) {
 		Name:               "another-test-cwevent",
 		ScheduleExpression: "cron(0 20 * * ? *)",
 		State:              "ENABLED",
-		LambdaFunctions:    nil,
+		Targets:            nil,
 	}
 
 	result2 := IsNewDefinedRule(cweventRule, rule2)

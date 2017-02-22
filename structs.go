@@ -9,19 +9,19 @@ type Rules struct {
 }
 
 type Rule struct {
-	Description        string           `yaml:"description"`
-	EventPattern       string           `yaml:"event_pattern"`
-	Name               string           `yaml:"name"`
-	ScheduleExpression string           `yaml:"schedule_expression"`
-	State              string           `yaml:"state"`
-	LambdaFunctions    []LambdaFunction `yaml:"lambda_functions"`
+	Description        string   `yaml:"description"`
+	EventPattern       string   `yaml:"event_pattern"`
+	Name               string   `yaml:"name"`
+	ScheduleExpression string   `yaml:"schedule_expression"`
+	State              string   `yaml:"state"`
+	Targets            []Target `yaml:"targets"`
 	ActualRule         cloudwatchevents.Rule
 	ActualTargets      []*cloudwatchevents.Target
 	NeedUpdate         bool
 }
 
-type LambdaFunction struct {
-	Name      string `yaml:"name"`
+type Target struct {
+	Arn       string `yaml:"arn"`
 	Input     string `yaml:"input"`
 	InputPath string `yaml:"input_path"`
 }
