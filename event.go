@@ -31,19 +31,19 @@ func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, des
 	const Elements = 5.0
 	matchCount := 0.0
 
-	if cweRule.Name != nil && *cweRule.Name == describedRule.Name {
+	if CompareString(cweRule.Name, &describedRule.Name) {
 		matchCount++
 	}
-	if cweRule.EventPattern != nil && *cweRule.EventPattern == describedRule.EventPattern {
+	if CompareString(cweRule.EventPattern, &describedRule.EventPattern) {
 		matchCount++
 	}
-	if cweRule.Description != nil && *cweRule.Description == describedRule.Description {
+	if CompareString(cweRule.Description, &describedRule.Description) {
 		matchCount++
 	}
-	if cweRule.ScheduleExpression != nil && *cweRule.ScheduleExpression == describedRule.ScheduleExpression {
+	if CompareString(cweRule.ScheduleExpression, &describedRule.ScheduleExpression) {
 		matchCount++
 	}
-	if cweRule.State != nil && *cweRule.State == describedRule.State {
+	if CompareString(cweRule.State, &describedRule.State) {
 		matchCount++
 	}
 	return (matchCount / Elements)
