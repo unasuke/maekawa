@@ -204,5 +204,4 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 	if target2.NeedUpdate == false {
 		t.Errorf("target2 should need update")
 	}
-
 }
