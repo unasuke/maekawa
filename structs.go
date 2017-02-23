@@ -24,6 +24,6 @@ type Target struct {
 	Id           string `yaml:"id"`
 	Input        string `yaml:"input"`
 	InputPath    string `yaml:"input_path"`
-	ActualTarget *cloudwatchevents.Target
+	ActualTarget cloudwatchevents.Target
 	NeedUpdate   bool
 }
