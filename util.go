@@ -4,6 +4,25 @@ import (
 	cwe "github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
+// compare strings
+// nil and empty string are same value
+func CompareString(a, b *string) bool {
+	if a == nil || *a == "" {
+		if b == nil || *b == "" {
+			return true
+		} else {
+			return false
+		}
+	} else if b == nil || *b == "" {
+		if a == nil || *a == "" {
+			return true
+		} else {
+			return false
+		}
+	}
+	return *a == *b
+}
+
 // return ClowdWatchEvent Rules that deleted specified index rule.
 func DeleteRuleFromSlice(src []*cwe.Rule, deleteIndex int) []*cwe.Rule {
 	dest := []*cwe.Rule{}
