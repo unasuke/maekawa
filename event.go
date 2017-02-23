@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
@@ -26,20 +28,18 @@ func fetchCWEventRuleFromDescribedRule(client *cloudwatchevents.CloudWatchEvents
 }
 
 // fetch ClowdWatchEvent target by Rule.ActualRule
-func fetchActualTargetsByRules(client *cloudwatchevents.CloudWatchEvents, rules []Rule) error {
-	for i, rule := range rules {
-		if rule.ActualRule.Name == nil {
-			continue
-		}
-		targets, err := client.ListTargetsByRule(&cloudwatchevents.ListTargetsByRuleInput{
-			Rule: rule.ActualRule.Name,
-		})
-		if err != nil {
-			return err
-		}
-		rules[i].ActualTargets = targets.Targets
+func fetchActualTargetsByRule(client *cloudwatchevents.CloudWatchEvents, r Rule) ([]*cloudwatchevents.Target, error) {
+	if r.ActualRule.Name == nil {
+		return nil, fmt.Errorf("Rule.ActualRule.Name is must be present")
 	}
-	return nil
+
+	targets, err := client.ListTargetsByRule(&cloudwatchevents.ListTargetsByRuleInput{
+		Rule: r.ActualRule.Name,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return targets.Targets, nil
 }
 
 // return match score ClowdWatchEvent rule and descripbed rule.
