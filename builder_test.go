@@ -205,3 +205,79 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 		t.Errorf("target2 should need update")
 	}
 }
+
+func TestCheckIsNeedUpdate(t *testing.T) {
+	rules := []Rule{
+		Rule{
+			Description:        "Test rule 1",
+			EventPattern:       "",
+			Name:               "test-1",
+			ScheduleExpression: "cron(0 20 * * ? *)",
+			State:              "ENABLED",
+			ActualRule: cloudwatchevents.Rule{
+				Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-1"),
+				Description:        aws.String("Test rule 1"),
+				EventPattern:       nil,
+				Name:               aws.String("test-1"),
+				RoleArn:            nil,
+				ScheduleExpression: aws.String("cron(0 20 * * ? *)"),
+				State:              aws.String("ENABLED"),
+			},
+			Targets: []Target{
+				Target{
+					Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
+					Id:    "Id1",
+					Input: "input",
+					ActualTarget: cloudwatchevents.Target{
+						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
+						Id:        aws.String("Id1"),
+						Input:     aws.String("input"),
+						InputPath: nil,
+					},
+				},
+			},
+		},
+		Rule{
+			Description:        "Test rule 2",
+			EventPattern:       "",
+			Name:               "test-2",
+			ScheduleExpression: "cron(0 20 * * ? *)",
+			State:              "ENABLED",
+			ActualRule: cloudwatchevents.Rule{
+				Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-2"),
+				Description:        aws.String("Test rule 2"),
+				EventPattern:       nil,
+				Name:               aws.String("test-2"),
+				RoleArn:            nil,
+				ScheduleExpression: aws.String("rate(1 day)"),
+				State:              aws.String("ENABLED"),
+			},
+			Targets: []Target{
+				Target{
+					Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
+					Id:    "Id2",
+					Input: "input",
+					ActualTarget: cloudwatchevents.Target{
+						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
+						Id:        aws.String("Id2"),
+						Input:     aws.String("another input"),
+						InputPath: nil,
+					},
+				},
+			},
+		},
+	}
+	CheckIsNeedUpdate(rules)
+	if rules[0].NeedUpdate == true {
+		t.Errorf("rule[0] shouldn't need update")
+	}
+	if rules[0].Targets[0].NeedUpdate == true {
+		t.Errorf("rule[0].Targets[0] shouldn't need update")
+	}
+	if rules[1].NeedUpdate == false {
+		t.Errorf("rule[1] should need update")
+	}
+	if rules[1].Targets[0].NeedUpdate == false {
+		t.Errorf("rule[1].Targets[0] should need update")
+	}
+}

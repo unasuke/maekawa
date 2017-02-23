@@ -85,3 +85,13 @@ func JudgeTargetNeedUpdate(t *Target) {
 		t.NeedUpdate = true
 	}
 }
+
+// check all rules and targets, update "NeedUpdate" field
+func CheckIsNeedUpdate(rules []Rule) {
+	for i, _ := range rules {
+		JudgeRuleNeedUpdate(&rules[i])
+		for j, _ := range rules[i].Targets {
+			JudgeTargetNeedUpdate(&rules[i].Targets[j])
+		}
+	}
+}
