@@ -12,6 +12,7 @@ type Rule struct {
 	Description        string   `yaml:"description"`
 	EventPattern       string   `yaml:"event_pattern"`
 	Name               string   `yaml:"name"`
+	RoleArn            string   `yaml:"role_arn"`
 	ScheduleExpression string   `yaml:"schedule_expression"`
 	State              string   `yaml:"state"`
 	Targets            []Target `yaml:"targets"`
