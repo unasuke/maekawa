@@ -76,3 +76,12 @@ func JudgeRuleNeedUpdate(r *Rule) {
 		r.NeedUpdate = true
 	}
 }
+
+// judge is target need update
+// compare target and ActualTarget
+func JudgeTargetNeedUpdate(t *Target) {
+	if !CompareString(&t.Input, t.ActualTarget.Input) ||
+		!CompareString(&t.InputPath, t.ActualTarget.InputPath) {
+		t.NeedUpdate = true
+	}
+}
