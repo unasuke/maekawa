@@ -150,11 +150,11 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 		},
 	}
 
-	target := DeleteRuleFromSlice(cweRules, 1)
-	if len(target) != 1 {
+	result := DeleteRuleFromSlice(cweRules, 1)
+	if len(result) != 1 {
 		t.Errorf("should return deleted slice")
 	}
-	if *target[0].Name != "test-1" {
+	if *result[0].Name != "test-1" {
 		t.Errorf("should deleted second rule(index is 1)")
 	}
 }
