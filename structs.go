@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+	cwe "github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
 type Rules struct {
@@ -15,7 +15,7 @@ type Rule struct {
 	ScheduleExpression string   `yaml:"schedule_expression"`
 	State              string   `yaml:"state"`
 	Targets            []Target `yaml:"targets"`
-	ActualRule         cloudwatchevents.Rule
+	ActualRule         cwe.Rule
 	NeedUpdate         bool
 }
 
@@ -24,6 +24,6 @@ type Target struct {
 	Id           string `yaml:"id"`
 	Input        string `yaml:"input"`
 	InputPath    string `yaml:"input_path"`
-	ActualTarget cloudwatchevents.Target
+	ActualTarget cwe.Target
 	NeedUpdate   bool
 }
