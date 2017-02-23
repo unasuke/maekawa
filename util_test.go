@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+	cwe "github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
 func TestDeleteRuleFromSlice(t *testing.T) {
-	cweRules := []*cloudwatchevents.Rule{
-		&cloudwatchevents.Rule{
+	cweRules := []*cwe.Rule{
+		&cwe.Rule{
 			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-1"),
 			Description:        aws.String("Test rule 1"),
 			EventPattern:       nil,
@@ -18,7 +18,7 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 			ScheduleExpression: aws.String("cron(0 20 * * ? *)"),
 			State:              aws.String("ENABLED"),
 		},
-		&cloudwatchevents.Rule{
+		&cwe.Rule{
 			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-2"),
 			Description:        aws.String("Test rule 2"),
 			EventPattern:       nil,
@@ -39,12 +39,12 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 }
 
 func TestDeleteTargetFromSlice(t *testing.T) {
-	cweTargets := []*cloudwatchevents.Target{
-		&cloudwatchevents.Target{
+	cweTargets := []*cwe.Target{
+		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
 			Id:  aws.String("Id1"),
 		},
-		&cloudwatchevents.Target{
+		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
 			Id:  aws.String("Id2"),
 		},
