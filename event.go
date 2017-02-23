@@ -44,7 +44,7 @@ func fetchActualTargetsByRule(client *cloudwatchevents.CloudWatchEvents, r Rule)
 
 // return match score ClowdWatchEvent rule and descripbed rule.
 func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, describedRule Rule) float64 {
-	const Elements = 5.0
+	const Elements = 6.0
 	matchCount := 0.0
 
 	if CompareString(cweRule.Name, &describedRule.Name) {
@@ -57,6 +57,9 @@ func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, des
 		matchCount++
 	}
 	if CompareString(cweRule.ScheduleExpression, &describedRule.ScheduleExpression) {
+		matchCount++
+	}
+	if CompareString(cweRule.RoleArn, &describedRule.RoleArn) {
 		matchCount++
 	}
 	if CompareString(cweRule.State, &describedRule.State) {

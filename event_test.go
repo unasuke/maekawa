@@ -34,8 +34,8 @@ func TestMatchScoreForCWEventRuleAndDescribedRule(t *testing.T) {
 
 	describedRule.Description = "another test rule"
 	result2 := MatchScoreForCWEventRuleAndDescribedRule(cweventRule, describedRule)
-	if result2 != 0.8 {
-		t.Error("match score should be eq 0.8 but got", result2)
+	if result2 != (5.0 / 6.0) {
+		t.Error("match score should be eq 0.833.. but got", result2)
 	}
 }
 
