@@ -76,7 +76,7 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 	}
 
 	target := DeleteRuleFromSlice(cweRules, 1)
-	if cap(target) != 1 {
+	if len(target) != 1 {
 		t.Errorf("should return deleted slice")
 	}
 	if *target[0].Name != "test-1" {
