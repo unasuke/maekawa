@@ -21,7 +21,9 @@ type Rule struct {
 }
 
 type Target struct {
-	Arn       string `yaml:"arn"`
-	Input     string `yaml:"input"`
-	InputPath string `yaml:"input_path"`
+	Arn        string `yaml:"arn"`
+	Id         string `yaml:"id"`
+	Input      string `yaml:"input"`
+	InputPath  string `yaml:"input_path"`
+	NeedUpdate bool
 }
