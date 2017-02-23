@@ -16,14 +16,14 @@ type Rule struct {
 	State              string   `yaml:"state"`
 	Targets            []Target `yaml:"targets"`
 	ActualRule         cloudwatchevents.Rule
-	ActualTargets      []*cloudwatchevents.Target
 	NeedUpdate         bool
 }
 
 type Target struct {
-	Arn        string `yaml:"arn"`
-	Id         string `yaml:"id"`
-	Input      string `yaml:"input"`
-	InputPath  string `yaml:"input_path"`
-	NeedUpdate bool
+	Arn          string `yaml:"arn"`
+	Id           string `yaml:"id"`
+	Input        string `yaml:"input"`
+	InputPath    string `yaml:"input_path"`
+	ActualTarget *cloudwatchevents.Target
+	NeedUpdate   bool
 }
