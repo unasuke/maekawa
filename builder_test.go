@@ -74,6 +74,58 @@ func TestAssociateRules(t *testing.T) {
 	}
 }
 
+func TestAssociateTargets(t *testing.T) {
+	cweTargets := []*cloudwatchevents.Target{
+		&cloudwatchevents.Target{
+			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
+			Id:  aws.String("Id1"),
+		},
+		&cloudwatchevents.Target{
+			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
+			Id:  aws.String("Id2"),
+		},
+	}
+
+	testTargets1 := []Target{
+		Target{
+			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
+			Id:  "Id2",
+		},
+		Target{
+			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
+			Id:  "Id1",
+		},
+	}
+
+	result1 := AssociateTargets(cweTargets, testTargets1)
+	if result1[0].Arn != *result1[0].ActualTarget.Arn &&
+		*result1[0].ActualTarget.Arn != *cweTargets[1].Arn {
+		t.Errorf("result1[0] should associate cweTargets[1]")
+	}
+	if result1[1].Arn != *result1[1].ActualTarget.Arn &&
+		*result1[1].ActualTarget.Arn != *cweTargets[0].Arn {
+		t.Errorf("result1[1] should associate cweTargets[0]")
+	}
+
+	testTargets2 := []Target{
+		Target{
+			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
+			Id:  "Id2",
+		},
+	}
+
+	result2 := AssociateTargets(cweTargets, testTargets2)
+	if l := len(result2); l != 2 {
+		t.Errorf("testTargets2 length should be 2 but length is %d", l)
+	}
+	for i, r := range result2 {
+		if r.Id == "Id2" && r.Arn != *r.ActualTarget.Arn {
+			t.Errorf("result2[%d] should associate 'Id2' but associated %s", i, *r.ActualTarget.Id)
+		}
+		if r.Id == "" && *r.ActualTarget.Id != "Id1" {
+			t.Errorf("result2[%d] (empty) should associate 'Id1' but associated %s", i, *r.ActualTarget.Id)
+		}
+	}
 }
 
 func TestDeleteRuleFromSlice(t *testing.T) {

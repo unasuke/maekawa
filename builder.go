@@ -33,6 +33,36 @@ func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []
 	}
 	return describedRules
 }
+
+func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []Target) []Target {
+	// if ClowdWatchEvents Targets is more than declareted targets, append number of lack target{}
+	if l := len(cweTargets) - len(describedTargets); l > 0 {
+		t := make([]Target, l)
+		describedTargets = append(describedTargets, t...)
+	}
+	dupCWETargets := make([]*cloudwatchevents.Target, len(cweTargets))
+	copy(dupCWETargets, cweTargets)
+
+	for i, target := range describedTargets {
+		for j, cweTarget := range cweTargets {
+			if CompareString(&target.Arn, cweTarget.Arn) && CompareString(&target.Id, cweTarget.Id) {
+				describedTargets[i].ActualTarget = *cweTarget
+				dupCWETargets = DeleteTargetFromSlice(dupCWETargets, j)
+				break
+			}
+		}
+	}
+	if len(dupCWETargets) > 0 {
+		for _, dupTarget := range dupCWETargets {
+			for j, target := range describedTargets {
+				if target.ActualTarget.Arn == nil {
+					describedTargets[j].ActualTarget = *dupTarget
+				}
+			}
+		}
+	}
+
+	return describedTargets
 }
 
 // return ClowdWatchEvent Rules that deleted specified index rule.
