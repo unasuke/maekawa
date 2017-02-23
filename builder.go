@@ -46,6 +46,17 @@ func DeleteRuleFromSlice(src []*cloudwatchevents.Rule, deleteIndex int) []*cloud
 	return dest
 }
 
+// return ClowdWatchEvent Targets that deleted specified index target.
+func DeleteTargetFromSlice(src []*cloudwatchevents.Target, deleteIndex int) []*cloudwatchevents.Target {
+	dest := []*cloudwatchevents.Target{}
+	for i, target := range src {
+		if i != deleteIndex {
+			dest = append(dest, target)
+		}
+	}
+	return dest
+}
+
 // judge is rule need update
 // compare rule and ActualRule
 func JudgeRuleNeedUpdate(r *Rule) {

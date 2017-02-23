@@ -107,6 +107,27 @@ func TestDeleteRuleFromSlice(t *testing.T) {
 	}
 }
 
+func TestDeleteTargetFromSlice(t *testing.T) {
+	cweTargets := []*cloudwatchevents.Target{
+		&cloudwatchevents.Target{
+			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
+			Id:  aws.String("Id1"),
+		},
+		&cloudwatchevents.Target{
+			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
+			Id:  aws.String("Id2"),
+		},
+	}
+
+	result := DeleteTargetFromSlice(cweTargets, 1)
+	if len(result) != 1 {
+		t.Errorf("should return deleted slice")
+	}
+	if *result[0].Id != "Id1" {
+		t.Errorf("should deleted second target(index is 1)")
+	}
+}
+
 func TestJudgeRuleNeedUpdate(t *testing.T) {
 	rule1 := Rule{
 		Description:        "Test rule 1",
