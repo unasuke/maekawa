@@ -28,7 +28,7 @@ func TestAssociateRules(t *testing.T) {
 			State:              aws.String("ENABLED"),
 		},
 	}
-	describedRules := []Rule{
+	describedRules1 := []Rule{
 		Rule{
 			Description:        "Test rule 1",
 			EventPattern:       "",
@@ -44,13 +44,36 @@ func TestAssociateRules(t *testing.T) {
 			State:              "ENABLED",
 		},
 	}
-	AssociateRules(cweRules, describedRules)
-	if *describedRules[0].ActualRule.Name != "test-1" {
-		t.Errorf("should associate 'test-1'")
+	result1 := AssociateRules(cweRules, describedRules1)
+	for i, r := range result1 {
+		if r.Name != *r.ActualRule.Name {
+			t.Errorf("result1[%d] should associate 'test-1' but associated %s", i, *r.ActualRule.Name)
+		}
 	}
-	if *describedRules[1].ActualRule.Name != "test-2" {
-		t.Errorf("should associate 'test-2'")
+
+	describedRules2 := []Rule{
+		Rule{
+			Description:        "Test rule 2",
+			EventPattern:       "",
+			Name:               "test-2",
+			ScheduleExpression: "cron(0 20 2 * ? *)",
+			State:              "ENABLED",
+		},
 	}
+	result2 := AssociateRules(cweRules, describedRules2)
+	if l := len(result2); l != 2 {
+		t.Errorf("result2 length should 2 but length is %d", l)
+	}
+	for i, r := range result2 {
+		if r.Name == "test-2" && r.Name != *r.ActualRule.Name {
+			t.Errorf("result2[%d] should associate 'test-2' but associated %s", i, *r.ActualRule.Name)
+		}
+		if r.Name == "" && *r.ActualRule.Name != "test-1" {
+			t.Errorf("result2[%d] (empty) should associate 'test-1' but associated %s", i, *r.ActualRule.Name)
+		}
+	}
+}
+
 }
 
 func TestDeleteRuleFromSlice(t *testing.T) {
