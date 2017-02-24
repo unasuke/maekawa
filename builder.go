@@ -106,12 +106,14 @@ func JudgeTargetNeedDelete(t *Target) {
 	}
 }
 
-// check all rules and targets, update "NeedUpdate" field
-func CheckIsNeedUpdate(rules []Rule) {
+// check all rules and targets, update "NeedUpdate" and "NeedDelete" field
+func CheckIsNeedUpdateOrDelete(rules []Rule) {
 	for i, _ := range rules {
 		JudgeRuleNeedUpdate(&rules[i])
+		JudgeRuleNeedDelete(&rules[i])
 		for j, _ := range rules[i].Targets {
 			JudgeTargetNeedUpdate(&rules[i].Targets[j])
+			JudgeTargetNeedDelete(&rules[i].Targets[j])
 		}
 	}
 }

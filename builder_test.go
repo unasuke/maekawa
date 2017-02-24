@@ -286,7 +286,7 @@ func TestJudgeTargetNeedDelete(t *testing.T) {
 	}
 }
 
-func TestCheckIsNeedUpdate(t *testing.T) {
+func TestCheckIsNeedUpdateOrDelete(t *testing.T) {
 	rules := []Rule{
 		Rule{
 			Description:        "Test rule 1",
@@ -346,8 +346,37 @@ func TestCheckIsNeedUpdate(t *testing.T) {
 				},
 			},
 		},
+		Rule{
+			Description:        "",
+			EventPattern:       "",
+			Name:               "",
+			ScheduleExpression: "",
+			State:              "",
+			ActualRule: cloudwatchevents.Rule{
+				Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-3"),
+				Description:        aws.String("Test rule 3"),
+				EventPattern:       nil,
+				Name:               aws.String("test-3"),
+				RoleArn:            nil,
+				ScheduleExpression: aws.String("rate(2 day)"),
+				State:              aws.String("ENABLED"),
+			},
+			Targets: []Target{
+				Target{
+					Arn:   "",
+					Id:    "",
+					Input: "",
+					ActualTarget: cloudwatchevents.Target{
+						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-3"),
+						Id:        aws.String("Id3"),
+						Input:     aws.String("will removed input"),
+						InputPath: nil,
+					},
+				},
+			},
+		},
 	}
-	CheckIsNeedUpdate(rules)
+	CheckIsNeedUpdateOrDelete(rules)
 	if rules[0].NeedUpdate == true {
 		t.Errorf("rule[0] shouldn't need update")
 	}
@@ -359,5 +388,11 @@ func TestCheckIsNeedUpdate(t *testing.T) {
 	}
 	if rules[1].Targets[0].NeedUpdate == false {
 		t.Errorf("rule[1].Targets[0] should need update")
+	}
+	if rules[2].NeedDelete == false {
+		t.Errorf("rule[2] should need delete")
+	}
+	if rules[2].Targets[0].NeedDelete == false {
+		t.Errorf("rule[2].Targets[0] should need delete")
 	}
 }
