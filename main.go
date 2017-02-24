@@ -44,6 +44,21 @@ func main() {
 	if errY != nil {
 		fmt.Errorf("File error %v", errY)
 	}
+
+	describedRules.Rules = AssociateRules(cweRulesOutput.Rules, describedRules.Rules)
+	for i, rule := range describedRules.Rules {
+		t, _ := fetchActualTargetsByRule(cloudwatchevents.New(sess), rule)
+		describedRules.Rules[i].Targets = AssociateTargets(t, describedRules.Rules[i].Targets)
+	}
+	CheckIsNeedUpdateOrDelete(describedRules.Rules)
+	displayWhatWillChange(describedRules.Rules)
+
+	if !dryrun {
+		errU := updateCloudWatchEvents(cloudwatchevents.New(sess), describedRules.Rules)
+		if errU != nil {
+			fmt.Errorf("API error %v", errU)
+		}
+	}
 }
 
 func loadYaml(file string, r *Rules) error {
