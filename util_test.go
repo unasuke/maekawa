@@ -84,3 +84,15 @@ func TestDeleteTargetFromSlice(t *testing.T) {
 		t.Errorf("should deleted second target(index is 1)")
 	}
 }
+
+func TestNilOrStringPtr(t *testing.T) {
+	empty := ""
+	if NilOrStringPtr(empty) != nil {
+		t.Errorf("should return nil")
+	}
+
+	str := "some string"
+	if r := NilOrStringPtr(str); *r != str {
+		t.Errorf("shoul return string pointer")
+	}
+}

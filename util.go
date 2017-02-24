@@ -44,3 +44,12 @@ func DeleteTargetFromSlice(src []*cwe.Target, deleteIndex int) []*cwe.Target {
 	}
 	return dest
 }
+
+// return string pointer if str is not empty
+// if str is empty ("") retuen nil
+func NilOrStringPtr(str string) *string {
+	if str == "" {
+		return nil
+	}
+	return &str
+}
