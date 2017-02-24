@@ -1,0 +1,9 @@
+package: github.com/unasuke/maekawa
+import:
+- package: github.com/aws/aws-sdk-go
+  version: ^1.7.0
+  subpackages:
+  - aws
+  - aws/session
+  - service/cloudwatchevents
+- package: gopkg.in/yaml.v2
