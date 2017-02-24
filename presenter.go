@@ -2,6 +2,35 @@ package main
 
 import "fmt"
 
+func displayWhatWillChange(rules []Rule) {
+	updates := WillUpdateRulesAndTargets(rules)
+	deletes := WillDeleteRulesAndTargets(rules)
+	if len(updates) == 0 && len(deletes) == 0 {
+		fmt.Println("No Changes")
+	}
+	if len(updates) > 0 {
+		fmt.Println("Updates")
+		for _, r := range updates {
+			ShowWillUpdateFieldInRule(r)
+			for _, t := range r.Targets {
+				if t.NeedUpdate && !t.NeedDelete {
+					ShowWillUpdateFieldInTarget(t)
+				}
+			}
+		}
+	}
+	if len(deletes) > 0 {
+		fmt.Println("Deletes")
+		for _, r := range deletes {
+			ShowWillDeleteRule(r)
+			for _, t := range r.Targets {
+				if t.NeedDelete {
+					ShowWillDeleteTarget(t)
+				}
+			}
+		}
+	}
+}
 
 // return will be updated rules and targets
 func WillUpdateRulesAndTargets(rules []Rule) []Rule {
