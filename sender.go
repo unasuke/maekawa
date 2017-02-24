@@ -24,7 +24,23 @@ func updateCloudWatchEvents(client *cwe.CloudWatchEvents, rules []Rule) error {
 }
 
 func updateCloudWatchEventRule(client *cwe.CloudWatchEvents, rule Rule) error {
-	if rule.NeedUpdate {
+	if rule.NeedDelete {
+		for _, target := range rule.Targets {
+			_, err2 := client.RemoveTargets(&cwe.RemoveTargetsInput{
+				Ids:  []*string{target.ActualTarget.Id},
+				Rule: rule.ActualRule.Name,
+			})
+			if err2 != nil {
+				return err2
+			}
+		}
+		_, err3 := client.DeleteRule(&cwe.DeleteRuleInput{
+			Name: rule.ActualRule.Name,
+		})
+		if err3 != nil {
+			return err3
+		}
+	} else if rule.NeedUpdate {
 		_, err := client.PutRule(&cwe.PutRuleInput{
 			Name:               NilOrStringPtr(rule.Name),
 			Description:        NilOrStringPtr(rule.Description),
@@ -39,7 +55,18 @@ func updateCloudWatchEventRule(client *cwe.CloudWatchEvents, rule Rule) error {
 }
 
 func updateCloudWatchEventTarget(client *cwe.CloudWatchEvents, rule Rule, target Target) error {
-	if target.NeedUpdate {
+	if target.NeedDelete {
+		// if rule.NeedDelete is true, this target was removed in updateCloudWatchEventRule
+		if !rule.NeedDelete {
+			_, err2 := client.RemoveTargets(&cwe.RemoveTargetsInput{
+				Ids:  []*string{target.ActualTarget.Id},
+				Rule: rule.ActualRule.Name,
+			})
+			if err2 != nil {
+				return err2
+			}
+		}
+	} else if target.NeedUpdate {
 		_, err := client.PutTargets(&cwe.PutTargetsInput{
 			Rule: NilOrStringPtr(rule.Name),
 			Targets: []*cwe.Target{
