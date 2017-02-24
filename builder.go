@@ -77,6 +77,18 @@ func JudgeRuleNeedUpdate(r *Rule) {
 	}
 }
 
+func JudgeRuleNeedDelete(r *Rule) {
+	if r.Name == "" &&
+		r.Description == "" &&
+		r.EventPattern == "" &&
+		r.ScheduleExpression == "" &&
+		r.RoleArn == "" &&
+		r.State == "" &&
+		r.ActualRule.Name != nil {
+		r.NeedDelete = true
+	}
+}
+
 // judge is target need update
 // compare target and ActualTarget
 func JudgeTargetNeedUpdate(t *Target) {

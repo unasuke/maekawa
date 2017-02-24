@@ -18,6 +18,7 @@ type Rule struct {
 	Targets            []Target `yaml:"targets"`
 	ActualRule         cwe.Rule
 	NeedUpdate         bool
+	NeedDelete         bool
 }
 
 type Target struct {

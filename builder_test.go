@@ -172,6 +172,52 @@ func TestJudgeRuleNeedUpdate(t *testing.T) {
 	}
 }
 
+func TestJudgeRuleNeedDelete(t *testing.T) {
+	rule1 := Rule{
+		Description:        "Test rule 1",
+		EventPattern:       "",
+		Name:               "test-1",
+		RoleArn:            "",
+		ScheduleExpression: "cron(0 20 * * ? *)",
+		State:              "ENABLED",
+		ActualRule: cloudwatchevents.Rule{
+			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-1"),
+			Description:        aws.String("Test rule 1"),
+			EventPattern:       nil,
+			Name:               aws.String("test-1"),
+			RoleArn:            nil,
+			ScheduleExpression: aws.String("cron(0 20 * * ? *)"),
+			State:              aws.String("ENABLED"),
+		},
+	}
+	JudgeRuleNeedDelete(&rule1)
+	if rule1.NeedDelete == true {
+		t.Errorf("rule1 shouldn't need delete")
+	}
+
+	rule2 := Rule{
+		Description:        "",
+		EventPattern:       "",
+		Name:               "",
+		ScheduleExpression: "",
+		RoleArn:            "",
+		State:              "",
+		ActualRule: cloudwatchevents.Rule{
+			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-2"),
+			Description:        aws.String("Test rule 2"),
+			EventPattern:       nil,
+			Name:               aws.String("test-2"),
+			RoleArn:            nil,
+			ScheduleExpression: aws.String("rate(1 day)"),
+			State:              aws.String("ENABLED"),
+		},
+	}
+	JudgeRuleNeedDelete(&rule2)
+	if rule2.NeedDelete == false {
+		t.Errorf("rule2 should need delete")
+	}
+}
+
 func TestJudgeTargetNeedUpdate(t *testing.T) {
 	target1 := Target{
 		Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
