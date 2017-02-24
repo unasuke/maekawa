@@ -28,4 +28,5 @@ type Target struct {
 	InputPath    string `yaml:"input_path"`
 	ActualTarget cwe.Target
 	NeedUpdate   bool
+	NeedDelete   bool
 }

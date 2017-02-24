@@ -98,6 +98,14 @@ func JudgeTargetNeedUpdate(t *Target) {
 	}
 }
 
+func JudgeTargetNeedDelete(t *Target) {
+	if t.Arn == "" &&
+		t.Id == "" &&
+		t.ActualTarget.Arn != nil {
+		t.NeedDelete = true
+	}
+}
+
 // check all rules and targets, update "NeedUpdate" field
 func CheckIsNeedUpdate(rules []Rule) {
 	for i, _ := range rules {

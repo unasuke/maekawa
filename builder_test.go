@@ -252,6 +252,40 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 	}
 }
 
+func TestJudgeTargetNeedDelete(t *testing.T) {
+	target1 := Target{
+		Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
+		Id:    "Id1",
+		Input: "input",
+		ActualTarget: cloudwatchevents.Target{
+			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
+			Id:        aws.String("Id1"),
+			Input:     aws.String("input"),
+			InputPath: nil,
+		},
+	}
+	JudgeTargetNeedDelete(&target1)
+	if target1.NeedDelete == true {
+		t.Errorf("target1 shouldn't need delete")
+	}
+
+	target2 := Target{
+		Arn:   "",
+		Id:    "",
+		Input: "",
+		ActualTarget: cloudwatchevents.Target{
+			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
+			Id:        aws.String("Id2"),
+			Input:     aws.String("another input"),
+			InputPath: nil,
+		},
+	}
+	JudgeTargetNeedDelete(&target2)
+	if target2.NeedDelete == false {
+		t.Errorf("target2 should need delete")
+	}
+}
+
 func TestCheckIsNeedUpdate(t *testing.T) {
 	rules := []Rule{
 		Rule{
