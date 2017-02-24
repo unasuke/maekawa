@@ -20,3 +20,21 @@ func WillUpdateRulesAndTargets(rules []Rule) []Rule {
 	}
 	return u
 }
+
+// return will be deleted rules and targets
+func WillDeleteRulesAndTargets(rules []Rule) []Rule {
+	d := make([]Rule, 0)
+	for _, rule := range rules {
+		if rule.NeedDelete {
+			d = append(d, rule)
+		} else {
+			for _, target := range rule.Targets {
+				if target.NeedDelete {
+					d = append(d, rule)
+					break
+				}
+			}
+		}
+	}
+	return d
+}
