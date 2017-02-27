@@ -32,20 +32,20 @@ func main() {
 		},
 	)
 	if errS != nil {
-		fmt.Errorf("Session error %v", errS)
+		fmt.Printf("Session error %v\n", errS)
 		os.Exit(1)
 	}
 
 	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
 	if errR != nil {
-		fmt.Errorf("API error %v", errR)
+		fmt.Printf("API error %v\n", errR)
 		os.Exit(1)
 	}
 
 	describedRules := Rules{}
 	errY := loadYaml(file, &describedRules)
 	if errY != nil {
-		fmt.Errorf("File error %v", errY)
+		fmt.Printf("File error %v\n", errY)
 		os.Exit(1)
 	}
 
@@ -60,7 +60,7 @@ func main() {
 	if apply && !dryrun {
 		errU := updateCloudWatchEvents(cloudwatchevents.New(sess), describedRules.Rules)
 		if errU != nil {
-			fmt.Errorf("API error %v", errU)
+			fmt.Printf("API error %v\n", errU)
 			os.Exit(1)
 		}
 	}
