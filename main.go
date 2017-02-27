@@ -53,7 +53,7 @@ func main() {
 	CheckIsNeedUpdateOrDelete(describedRules.Rules)
 	displayWhatWillChange(describedRules.Rules)
 
-	if !dryrun {
+	if apply && !dryrun {
 		errU := updateCloudWatchEvents(cloudwatchevents.New(sess), describedRules.Rules)
 		if errU != nil {
 			fmt.Errorf("API error %v", errU)
