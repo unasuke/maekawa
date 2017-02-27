@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
 
 	yaml "gopkg.in/yaml.v2"
 
@@ -32,17 +33,20 @@ func main() {
 	)
 	if errS != nil {
 		fmt.Errorf("Session error %v", errS)
+		os.Exit(1)
 	}
 
 	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
 	if errR != nil {
 		fmt.Errorf("API error %v", errR)
+		os.Exit(1)
 	}
 
 	describedRules := Rules{}
 	errY := loadYaml(file, &describedRules)
 	if errY != nil {
 		fmt.Errorf("File error %v", errY)
+		os.Exit(1)
 	}
 
 	describedRules.Rules = AssociateRules(cweRulesOutput.Rules, describedRules.Rules)
@@ -57,6 +61,7 @@ func main() {
 		errU := updateCloudWatchEvents(cloudwatchevents.New(sess), describedRules.Rules)
 		if errU != nil {
 			fmt.Errorf("API error %v", errU)
+			os.Exit(1)
 		}
 	}
 }
