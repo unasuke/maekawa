@@ -71,38 +71,38 @@ func WillDeleteRulesAndTargets(rules []Rule) []Rule {
 func ShowWillUpdateFieldInRule(rule Rule) {
 	fmt.Printf("Rule: %s\n", rule.Name)
 	if !CompareString(&rule.Name, rule.ActualRule.Name) {
-		fmt.Printf("Name: %s \t->\t %s\n", *rule.ActualRule.Name, rule.Name)
+		fmt.Printf("Name: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.Name), rule.Name)
 	}
 	if !CompareString(&rule.Description, rule.ActualRule.Description) {
-		fmt.Printf("Description: %s \t->\t %s\n", *rule.ActualRule.Description, rule.Description)
+		fmt.Printf("Description: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.Description), rule.Description)
 	}
 	if !CompareString(&rule.EventPattern, rule.ActualRule.EventPattern) {
-		fmt.Printf("EventPattern: %s \t->\t %s\n", *rule.ActualRule.EventPattern, rule.EventPattern)
+		fmt.Printf("EventPattern: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.EventPattern), rule.EventPattern)
 	}
 	if !CompareString(&rule.RoleArn, rule.ActualRule.RoleArn) {
-		fmt.Printf("RoleArn: %s \t->\t %s\n", *rule.ActualRule.RoleArn, rule.RoleArn)
+		fmt.Printf("RoleArn: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.RoleArn), rule.RoleArn)
 	}
 	if !CompareString(&rule.ScheduleExpression, rule.ActualRule.ScheduleExpression) {
-		fmt.Printf("ScheduleExpression: %s \t->\t %s\n", *rule.ActualRule.ScheduleExpression, rule.ScheduleExpression)
+		fmt.Printf("ScheduleExpression: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.ScheduleExpression), rule.ScheduleExpression)
 	}
 	if !CompareString(&rule.State, rule.ActualRule.State) {
-		fmt.Printf("State: %s \t->\t %s\n", *rule.ActualRule.State, rule.State)
+		fmt.Printf("State: %s \t->\t %s\n", NilSafeStr(rule.ActualRule.State), rule.State)
 	}
 }
 
 func ShowWillUpdateFieldInTarget(target Target) {
 	fmt.Printf("Target: %s\n", target.Arn)
 	if !CompareString(&target.Arn, target.ActualTarget.Arn) {
-		fmt.Printf("Arn: %s \t->\t %s\n", *target.ActualTarget.Arn, target.Arn)
+		fmt.Printf("Arn: %s \t->\t %s\n", NilSafeStr(target.ActualTarget.Arn), target.Arn)
 	}
 	if !CompareString(&target.Id, target.ActualTarget.Id) {
-		fmt.Printf("Id: %s \t->\t %s\n", *target.ActualTarget.Id, target.Id)
+		fmt.Printf("Id: %s \t->\t %s\n", NilSafeStr(target.ActualTarget.Id), target.Id)
 	}
 	if !CompareString(&target.Input, target.ActualTarget.Input) {
-		fmt.Printf("Input: %s \t->\t %s\n", *target.ActualTarget.Input, target.Input)
+		fmt.Printf("Input: %s \t->\t %s\n", NilSafeStr(target.ActualTarget.Input), target.Input)
 	}
 	if !CompareString(&target.InputPath, target.ActualTarget.InputPath) {
-		fmt.Printf("InputPath: %s \t->\t %s\n", *target.ActualTarget.InputPath, target.InputPath)
+		fmt.Printf("InputPath: %s \t->\t %s\n", NilSafeStr(target.ActualTarget.InputPath), target.InputPath)
 	}
 }
 
