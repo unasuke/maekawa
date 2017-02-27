@@ -53,3 +53,11 @@ func NilOrStringPtr(str string) *string {
 	}
 	return &str
 }
+
+func NilSafeStr(str *string) string {
+	if str == nil {
+		return ""
+	} else {
+		return *str
+	}
+}

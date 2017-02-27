@@ -96,3 +96,14 @@ func TestNilOrStringPtr(t *testing.T) {
 		t.Errorf("shoul return string pointer")
 	}
 }
+
+func TestNilSafeStr(t *testing.T) {
+	str := "test"
+	if NilSafeStr(&str) != "test" {
+		t.Errorf("should return 'test'")
+	}
+
+	if NilSafeStr(nil) != "" {
+		t.Errorf("should return empty string")
+	}
+}
