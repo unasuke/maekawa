@@ -1,5 +1,5 @@
 # maekawa
-Maekawa is a client fotr AWS CloudWatch Events has idempotence.
+Maekawa is a client for AWS CloudWatch Events has idempotence.
 
 Japanese version is under the English version.
 (日本語のREADMEが英語の下にあります)
