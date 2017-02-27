@@ -5,3 +5,16 @@ install:
   - go get github.com/Masterminds/glide
   - glide install
 script: go test -v $(glide novendor)
+before_deploy:
+  - go get github.com/mitchellh/gox
+  - gox --output build/{{.Dir}}_{{.OS}}_{{.Arch}}
+deploy:
+  provider: releases
+  api_key:
+    secure: 0q28hvkEi2Tz6uXWFcLkb9lapIThNPhdjr/Y0aOBbTcdXiQO2js4J4HUJUJnpADObWzyxU8/wRPrwxIdb0HidtwZ1WLRUd/Hgduc8j3P1GlfEY8ho7195d5/tozz1fNiupIt2yUaJVWmgeYH/PwfSLBa+wwW44nj7CQQGC/O7GTZJhssJpd5GHDXVx+RkBxrFJL9J8CbiDSRru7AYZe2v51abVw3WzBjgGKylpdtvW5uP5OHlBoc8noWNCP3y2uJOqoaM4Kp5VrZ0b40BFB3rPLQ2Xt4NBhS16wgBuYHQy94J1PPrR34lYWKJs/ld1lNKGmxJm3tqd0p34MlIn0ADwVBZpCF2jfnSiQRXsmItYDsEZA7uoPF+omu9envZ9CIL9CrfMNrQWnUENFIMs6yRLl7xla0cUC4e7ijciWu8VV7lASlgvgrSlqgtkkTHtt4mzMSjniCk6COV9uDHcAD7la/opJrqHBFVJ3OvJOZAVXMompPs0EXrX2vj8/aty60biwJjIUKrBZ9AvbWNuWt+NqpAt0ghS/6o9GXJX8V31a/5gpQGEpH/3a4r0GPrCKzkS3KAvOFAo0L//1WlMHfuvYUA0mzBuZhyeoXtfnH6O0oUcYlh384v1SEZSJ8TJnXqj/5G4CWJDO1zHSQD7kp+PnoyoSJGim2KnEnYPVeXQI=
+  file_glob: true
+  file: 'build/*'
+  on:
+    tags: true
+    branch: master
+    repo: unasuke/maekawa
