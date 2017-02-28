@@ -79,6 +79,19 @@ Specify config file path. (default `config.yml`)
 ### --help, -h
 Show options.
 
+## License
+This software is licensed under the MIT License. Please see the LICENSE.txt file for details.
+
+### aws-sdk-go
+The aws-sdk-go is distributed under the Apache License, Version 2.0.
+
+https://github.com/aws/aws-sdk-go
+
+### yaml
+The yaml package is distributed under the Apache License 2.0.
+
+https://github.com/go-yaml/yaml
+
 -----------------------------------
 
 # maekawa
