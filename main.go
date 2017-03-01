@@ -25,7 +25,7 @@ func main() {
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
 	flag.StringVar(&file, "file", "config.yml", "file path to setting yaml")
 	flag.StringVar(&file, "f", "config.yml", "file path to setting yaml (shorthand)")
-	flag.StringVar(&awsRegion, "region", "", "aws region")
+	flag.StringVar(&awsRegion, "region", os.Getenv("AWS_REGION"), "aws region")
 	flag.Parse()
 
 	sess, errS := session.NewSession(
