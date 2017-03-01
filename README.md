@@ -65,7 +65,8 @@ $ maekawa --region=ap-northeast-1 --apply # apply config.yml
 
 ## options
 ### --region
-Specify aws region
+Specify aws region.
+If set env `AWS_REGION`, use this. But, `--region` option is override env.
 
 ### --apply
 Apply your config to AWS CloudWatch Events.
@@ -159,6 +160,7 @@ $ maekawa --region=ap-northeast-1 --apply # config.ymlの内容を適用
 ## オプション
 ### --region
 AWS regionを指定します。
+環境変数に`AWS_REGION`が存在する場合それを使用しますが、`--region`が指定された場合はそちらで上書きます。
 
 ### --apply
 configに記述された内容をAWS CloudWatch Eventsに適用します。
