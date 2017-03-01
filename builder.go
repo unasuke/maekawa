@@ -44,7 +44,7 @@ func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []
 	copy(dupCWETargets, cweTargets)
 
 	for i, target := range describedTargets {
-		for j, cweTarget := range cweTargets {
+		for j, cweTarget := range dupCWETargets {
 			if CompareString(&target.Arn, cweTarget.Arn) && CompareString(&target.Id, cweTarget.Id) {
 				describedTargets[i].ActualTarget = *cweTarget
 				dupCWETargets = DeleteTargetFromSlice(dupCWETargets, j)
