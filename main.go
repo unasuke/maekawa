@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
-var Version = "0.1.0"
+var Version = "0.2.0"
 
 func main() {
 	var (
