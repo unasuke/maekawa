@@ -19,6 +19,13 @@ Or, run this.
 $ go get github.com/unasuke/maekawa
 ```
 
+### macOS
+If you using macOS and homebrew, you can install maekawa this command.
+
+```shell
+$ brew install unasuke/maekawa/maekawa
+```
+
 ## usage
 ### 1. install awscli and run `aws configure`
 - [Installing the AWS Command Line Interface - AWS Command Line Interface](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
@@ -111,6 +118,13 @@ https://github.com/unasuke/maekawa/releases
 
 ```shell
 $ go get github.com/unasuke/maekawa
+```
+
+### macOS
+もしmacOSとhomebrewを使用している場合、次のコマンドでもインストールできます。
+
+```shell
+$ brew install unasuke/maekawa/maekawa
 ```
 
 ## 使い方
