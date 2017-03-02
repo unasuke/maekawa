@@ -1,4 +1,6 @@
 # maekawa
+[![Build Status](https://travis-ci.org/unasuke/maekawa.svg?branch=master)](https://travis-ci.org/unasuke/maekawa)
+
 Maekawa is a client for AWS CloudWatch Events has idempotence.
 
 Japanese version is under the English version.
@@ -84,7 +86,7 @@ Show options.
 This software is licensed under the MIT License. Please see the LICENSE.txt file for details.
 
 ### aws-sdk-go
-The aws-sdk-go is distributed under the Apache License, Version 2.0.
+The aws-sdk-go is distributed under the Apache License 2.0.
 
 https://github.com/aws/aws-sdk-go
 
