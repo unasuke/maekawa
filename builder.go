@@ -44,7 +44,7 @@ func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []
 	copy(dupCWETargets, cweTargets)
 
 	for i, target := range describedTargets {
-		for j, cweTarget := range cweTargets {
+		for j, cweTarget := range dupCWETargets {
 			if CompareString(&target.Arn, cweTarget.Arn) && CompareString(&target.Id, cweTarget.Id) {
 				describedTargets[i].ActualTarget = *cweTarget
 				dupCWETargets = DeleteTargetFromSlice(dupCWETargets, j)
@@ -92,7 +92,9 @@ func JudgeRuleNeedDelete(r *Rule) {
 // judge is target need update
 // compare target and ActualTarget
 func JudgeTargetNeedUpdate(t *Target) {
-	if !CompareString(&t.Input, t.ActualTarget.Input) ||
+	if !CompareString(&t.Arn, t.ActualTarget.Arn) ||
+		!CompareString(&t.Id, t.ActualTarget.Id) ||
+		!CompareString(&t.Input, t.ActualTarget.Input) ||
 		!CompareString(&t.InputPath, t.ActualTarget.InputPath) {
 		t.NeedUpdate = true
 	}
