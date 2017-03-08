@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+	"github.com/aws/aws-sdk-go/service/lambda"
 )
 
 var Version = "0.2.0"
@@ -41,6 +42,12 @@ func main() {
 	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
 	if errR != nil {
 		fmt.Printf("API error %v\n", errR)
+		os.Exit(1)
+	}
+
+	lambdaClient, errL := lambda.New(sess)
+	if errL != nil {
+		fmt.Printf("API error %v\n", errL)
 		os.Exit(1)
 	}
 
