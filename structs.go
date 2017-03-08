@@ -30,3 +30,30 @@ type Target struct {
 	NeedUpdate   bool
 	NeedDelete   bool
 }
+
+type LambdaPolicy struct {
+	Version   string             `json:"Version"`
+	Id        string             `json:"Id"`
+	Statement *[]PolicyStatement `json:"Statement"`
+}
+
+type PolicyStatement struct {
+	Resource    string           `json:"Resource"`
+	Condition   *PolicyCondition `json:"Condition"`
+	StatementId string           `json:"Sid"`
+	Effect      string           `json:"Effect"`
+	Principal   *PolicyPrincipal `json:"Principal"`
+	Action      string           `json:"Action"`
+}
+
+type PolicyCondition struct {
+	ArnLike *PolicyArnLike `json:"ArnLike"`
+}
+
+type PolicyArnLike struct {
+	AwsSourceArn string `json:"AWS:SourceArn"`
+}
+
+type PolicyPrincipal struct {
+	Service string `json:"Service"`
+}
