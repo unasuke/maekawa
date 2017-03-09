@@ -4,8 +4,35 @@ import (
 	"encoding/json"
 	"strings"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/lambda"
 )
+
+func addPermissionToLambdaFromCloudWatchEvents(lc *lambda.Lambda, rules []Rule) error {
+	for _, rule := range rules {
+		for _, target := range rule.Targets {
+			if !IsLambdaFunction(target.Arn) {
+				continue
+			}
+
+			if result, err := isAlreadyAddPermission(lc, rule, target); err != nil {
+				return err
+			} else if result {
+				// do nothing (already granted permission)
+				continue
+			} else {
+				lc.AddPermission(&lambda.AddPermissionInput{
+					Action:       aws.String("lambda:InvokeFunction"),
+					FunctionName: aws.String(LambdaFunctionNameFromArn(target.Arn)),
+					Principal:    aws.String("events.amazonaws.com"),
+					SourceArn:    rule.ActualRule.Arn,
+					StatementId:  aws.String(target.Id),
+				})
+			}
+		}
+	}
+	return nil
+}
 
 func isAlreadyAddPermission(lc *lambda.Lambda, rule Rule, target Target) (bool, error) {
 	var policy LambdaPolicy
