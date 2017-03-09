@@ -72,6 +72,13 @@ func main() {
 			fmt.Printf("API error %v\n", err)
 			os.Exit(1)
 		}
+
+		err = removePermissonFromLambda(lambdaClient, describedRules.Rules)
+		if err != nil {
+			fmt.Printf("API error %v\n", err)
+			os.Exit(1)
+		}
+
 		// Grant permission to invoke lambda function from CloudWatch Events
 		cweRulesAfterApply, err = cweClient.ListRules(nil)
 		describedRules.Rules = AssociateRules(cweRulesAfterApply.Rules, describedRules.Rules)
