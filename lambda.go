@@ -38,6 +38,25 @@ func addPermissionToLambdaFromCloudWatchEvents(lc *lambda.Lambda, rules []Rule) 
 	return nil
 }
 
+func removePermissonFromLambda(lc *lambda.Lambda, rules []Rule) error {
+	for _, rule := range rules {
+		for _, target := range rule.Targets {
+			if target.NeedDelete && IsLambdaFunction(*target.ActualTarget.Arn) {
+				_, err := lc.RemovePermission(&lambda.RemovePermissionInput{
+					FunctionName: target.ActualTarget.Arn,
+					StatementId:  target.ActualTarget.Id,
+				})
+
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
 func isAlreadyAddPermission(lc *lambda.Lambda, rule Rule, target Target) (bool, error) {
 	var policy LambdaPolicy
 
