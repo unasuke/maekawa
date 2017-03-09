@@ -39,15 +39,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
+	cweClient := cloudwatchevents.New(sess)
+	lambdaClient := lambda.New(sess)
+
+	cweRulesOutput, errR := cweClient.ListRules(nil)
 	if errR != nil {
 		fmt.Printf("API error %v\n", errR)
-		os.Exit(1)
-	}
-
-	lambdaClient, errL := lambda.New(sess)
-	if errL != nil {
-		fmt.Printf("API error %v\n", errL)
 		os.Exit(1)
 	}
 
