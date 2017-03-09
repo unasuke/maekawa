@@ -21,13 +21,17 @@ func addPermissionToLambdaFromCloudWatchEvents(lc *lambda.Lambda, rules []Rule) 
 				// do nothing (already granted permission)
 				continue
 			} else {
-				lc.AddPermission(&lambda.AddPermissionInput{
+				_, errL := lc.AddPermission(&lambda.AddPermissionInput{
 					Action:       aws.String("lambda:InvokeFunction"),
 					FunctionName: aws.String(LambdaFunctionNameFromArn(target.Arn)),
 					Principal:    aws.String("events.amazonaws.com"),
 					SourceArn:    rule.ActualRule.Arn,
 					StatementId:  aws.String(target.Id),
 				})
+
+				if errL != nil {
+					return errL
+				}
 			}
 		}
 	}
