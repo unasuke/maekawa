@@ -11,14 +11,18 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+	"github.com/aws/aws-sdk-go/service/lambda"
 )
 
 var Version = "0.2.0"
 
 func main() {
 	var (
-		apply, dryrun   bool
-		file, awsRegion string
+		apply, dryrun                           bool
+		file, awsRegion                         string
+		err                                     error
+		sess                                    *session.Session
+		cweRulesBeforeApply, cweRulesAfterApply *cloudwatchevents.ListRulesOutput
 	)
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
@@ -28,42 +32,64 @@ func main() {
 	flag.StringVar(&awsRegion, "region", os.Getenv("AWS_REGION"), "aws region")
 	flag.Parse()
 
-	sess, errS := session.NewSession(
+	sess, err = session.NewSession(
 		&aws.Config{
 			Region: aws.String(awsRegion),
 		},
 	)
-	if errS != nil {
-		fmt.Printf("Session error %v\n", errS)
+	if err != nil {
+		fmt.Printf("Session error %v\n", err)
 		os.Exit(1)
 	}
 
-	cweRulesOutput, errR := cloudwatchevents.New(sess).ListRules(nil)
-	if errR != nil {
-		fmt.Printf("API error %v\n", errR)
+	cweClient := cloudwatchevents.New(sess)
+	lambdaClient := lambda.New(sess)
+
+	cweRulesBeforeApply, err = cweClient.ListRules(nil)
+	if err != nil {
+		fmt.Printf("API error %v\n", err)
 		os.Exit(1)
 	}
 
 	describedRules := Rules{}
-	errY := loadYaml(file, &describedRules)
-	if errY != nil {
-		fmt.Printf("File error %v\n", errY)
+	err = loadYaml(file, &describedRules)
+	if err != nil {
+		fmt.Printf("File error %v\n", err)
 		os.Exit(1)
 	}
 
-	describedRules.Rules = AssociateRules(cweRulesOutput.Rules, describedRules.Rules)
+	describedRules.Rules = AssociateRules(cweRulesBeforeApply.Rules, describedRules.Rules)
 	for i, rule := range describedRules.Rules {
-		t, _ := fetchActualTargetsByRule(cloudwatchevents.New(sess), rule)
+		t, _ := fetchActualTargetsByRule(cweClient, rule)
 		describedRules.Rules[i].Targets = AssociateTargets(t, describedRules.Rules[i].Targets)
 	}
 	CheckIsNeedUpdateOrDelete(describedRules.Rules)
 	displayWhatWillChange(describedRules.Rules)
 
 	if apply && !dryrun {
-		errU := updateCloudWatchEvents(cloudwatchevents.New(sess), describedRules.Rules)
-		if errU != nil {
-			fmt.Printf("API error %v\n", errU)
+		err = updateCloudWatchEvents(cweClient, describedRules.Rules)
+		if err != nil {
+			fmt.Printf("API error %v\n", err)
 			os.Exit(1)
+		}
+
+		err = removePermissonFromLambda(lambdaClient, describedRules.Rules)
+		if err != nil {
+			fmt.Printf("API error %v\n", err)
+			os.Exit(1)
+		}
+
+		// Grant permission to invoke lambda function from CloudWatch Events
+		cweRulesAfterApply, err = cweClient.ListRules(nil)
+		describedRules.Rules = AssociateRules(cweRulesAfterApply.Rules, describedRules.Rules)
+		for i, rule := range describedRules.Rules {
+			t, _ := fetchActualTargetsByRule(cweClient, rule)
+			describedRules.Rules[i].Targets = AssociateTargets(t, describedRules.Rules[i].Targets)
+		}
+
+		err = addPermissionToLambdaFromCloudWatchEvents(lambdaClient, describedRules.Rules)
+		if err != nil {
+			fmt.Print("Grant permission error %v\n", err)
 		}
 	}
 }
