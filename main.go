@@ -42,7 +42,7 @@ func main() {
 	cweClient := cloudwatchevents.New(sess)
 	lambdaClient := lambda.New(sess)
 
-	cweRulesOutput, errR := cweClient.ListRules(nil)
+	cweRulesBeforeApply, errR := cweClient.ListRules(nil)
 	if errR != nil {
 		fmt.Printf("API error %v\n", errR)
 		os.Exit(1)
@@ -55,7 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	describedRules.Rules = AssociateRules(cweRulesOutput.Rules, describedRules.Rules)
+	describedRules.Rules = AssociateRules(cweRulesBeforeApply.Rules, describedRules.Rules)
 	for i, rule := range describedRules.Rules {
 		t, _ := fetchActualTargetsByRule(cloudwatchevents.New(sess), rule)
 		describedRules.Rules[i].Targets = AssociateTargets(t, describedRules.Rules[i].Targets)
