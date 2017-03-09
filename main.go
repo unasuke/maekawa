@@ -72,6 +72,18 @@ func main() {
 			fmt.Printf("API error %v\n", err)
 			os.Exit(1)
 		}
+		// Grant permission to invoke lambda function from CloudWatch Events
+		cweRulesAfterApply, err = cweClient.ListRules(nil)
+		describedRules.Rules = AssociateRules(cweRulesAfterApply.Rules, describedRules.Rules)
+		for i, rule := range describedRules.Rules {
+			t, _ := fetchActualTargetsByRule(cweClient, rule)
+			describedRules.Rules[i].Targets = AssociateTargets(t, describedRules.Rules[i].Targets)
+		}
+
+		err = addPermissionToLambdaFromCloudWatchEvents(lambdaClient, describedRules.Rules)
+		if err != nil {
+			fmt.Print("Grant permission error %v\n", err)
+		}
 	}
 }
 
