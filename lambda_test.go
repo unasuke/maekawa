@@ -15,3 +15,10 @@ func TestIsLambdaFunction(t *testing.T) {
 		t.Errorf("%s is not lambda function", ec2Arn)
 	}
 }
+
+func TestLambdaFunctionNameFromArn(t *testing.T) {
+	lambdaArn := "arn:aws:lambda:ap-northeast-1:000000000000:function:lambda-function-name:3"
+	if res := LambdaFunctionNameFromArn(lambdaArn); res != "lambda-function-name" {
+		t.Errorf("should return 'lambda-function-name', but got %s", res)
+	}
+}
