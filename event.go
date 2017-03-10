@@ -42,7 +42,7 @@ func fetchActualTargetsByRule(client *cloudwatchevents.CloudWatchEvents, r Rule)
 	return targets.Targets, nil
 }
 
-// return match score ClowdWatchEvent rule and descripbed rule.
+// MatchScoreForCWEventRuleAndDescribedRule return match score ClowdWatchEvent rule and descripbed rule.
 func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, describedRule Rule) float64 {
 	const Elements = 6.0
 	matchCount := 0.0
@@ -68,7 +68,7 @@ func MatchScoreForCWEventRuleAndDescribedRule(cweRule cloudwatchevents.Rule, des
 	return (matchCount / Elements)
 }
 
-// return true when rule is new defined in yaml configration file
+// IsNewDefinedRule return true when rule is new defined in yaml configration file
 // judgemant by name(arn)
 func IsNewDefinedRule(cweRule cloudwatchevents.Rule, describedRule Rule) bool {
 	return *cweRule.Name != describedRule.Name
