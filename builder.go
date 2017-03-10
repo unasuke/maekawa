@@ -4,7 +4,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
-// Associate ClowdWatchEvent Rule and descripbed Rule(name based)
+// AssociateRules is asociate ClowdWatchEvent Rule and descripbed Rule(name based)
 func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []Rule {
 	if l := len(cweRules) - len(describedRules); l > 0 {
 		r := make([]Rule, l)
@@ -34,6 +34,7 @@ func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []
 	return describedRules
 }
 
+// AssociateTargets is asociate ClowdWatchEvent targets and descripbed targets(Id based)
 func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []Target) []Target {
 	// if ClowdWatchEvents Targets is more than declareted targets, append number of lack target{}
 	if l := len(cweTargets) - len(describedTargets); l > 0 {
@@ -65,7 +66,7 @@ func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []
 	return describedTargets
 }
 
-// judge is rule need update
+// JudgeRuleNeedUpdate is judge the rule need update
 // compare rule and ActualRule
 func JudgeRuleNeedUpdate(r *Rule) {
 	if !CompareString(&r.Name, r.ActualRule.Name) ||
@@ -77,6 +78,7 @@ func JudgeRuleNeedUpdate(r *Rule) {
 	}
 }
 
+// JudgeRuleNeedDelete is judge the rule need delete
 func JudgeRuleNeedDelete(r *Rule) {
 	if r.Name == "" &&
 		r.Description == "" &&
@@ -89,7 +91,7 @@ func JudgeRuleNeedDelete(r *Rule) {
 	}
 }
 
-// judge is target need update
+// JudgeTargetNeedUpdate is judge the target need update
 // compare target and ActualTarget
 func JudgeTargetNeedUpdate(t *Target) {
 	if !CompareString(&t.Arn, t.ActualTarget.Arn) ||
@@ -100,6 +102,7 @@ func JudgeTargetNeedUpdate(t *Target) {
 	}
 }
 
+// JudgeTargetNeedDelete is judge the target need delete
 func JudgeTargetNeedDelete(t *Target) {
 	if t.Arn == "" &&
 		t.Id == "" &&
@@ -108,7 +111,8 @@ func JudgeTargetNeedDelete(t *Target) {
 	}
 }
 
-// check all rules and targets, update "NeedUpdate" and "NeedDelete" field
+// CheckIsNeedUpdateOrDelete is check all rules and targets,
+// update "NeedUpdate" and "NeedDelete" field
 func CheckIsNeedUpdateOrDelete(rules []Rule) {
 	for i, _ := range rules {
 		JudgeRuleNeedUpdate(&rules[i])
