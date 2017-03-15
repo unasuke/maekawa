@@ -13,15 +13,13 @@ func CompareString(a, b *string) bool {
 	if a == nil || *a == "" {
 		if b == nil || *b == "" {
 			return true
-		} else {
-			return false
 		}
+		return false
 	} else if b == nil || *b == "" {
 		if a == nil || *a == "" {
 			return true
-		} else {
-			return false
 		}
+		return false
 	}
 	return *a == *b
 }
@@ -61,7 +59,6 @@ func NilOrStringPtr(str string) *string {
 func NilSafeStr(str *string) string {
 	if str == nil {
 		return ""
-	} else {
-		return *str
 	}
+	return *str
 }
