@@ -114,10 +114,10 @@ func JudgeTargetNeedDelete(t *Target) {
 // CheckIsNeedUpdateOrDelete is check all rules and targets,
 // update "NeedUpdate" and "NeedDelete" field
 func CheckIsNeedUpdateOrDelete(rules []Rule) {
-	for i, _ := range rules {
+	for i := range rules {
 		JudgeRuleNeedUpdate(&rules[i])
 		JudgeRuleNeedDelete(&rules[i])
-		for j, _ := range rules[i].Targets {
+		for j := range rules[i].Targets {
 			JudgeTargetNeedUpdate(&rules[i].Targets[j])
 			JudgeTargetNeedDelete(&rules[i].Targets[j])
 		}
