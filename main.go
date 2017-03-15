@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/lambda"
 )
 
+// Version of the maekawa
 var Version = "0.3.0"
 
 func main() {
