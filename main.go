@@ -19,7 +19,7 @@ var Version = "0.3.0"
 
 func main() {
 	var (
-		apply, dryrun                           bool
+		apply, dryrun, version                  bool
 		file, awsRegion                         string
 		err                                     error
 		sess                                    *session.Session
@@ -28,10 +28,17 @@ func main() {
 
 	flag.BoolVar(&apply, "apply", false, "apply to CloudWatch Events")
 	flag.BoolVar(&dryrun, "dry-run", false, "dry-run")
+	flag.BoolVar(&version, "version", false, "show maekawa version")
+	flag.BoolVar(&version, "v", false, "show maekawa version (shorthand)")
 	flag.StringVar(&file, "file", "config.yml", "file path to setting yaml")
 	flag.StringVar(&file, "f", "config.yml", "file path to setting yaml (shorthand)")
 	flag.StringVar(&awsRegion, "region", os.Getenv("AWS_REGION"), "aws region")
 	flag.Parse()
+
+	if version {
+		fmt.Printf("maekawa version %s\n", Version)
+		os.Exit(0)
+	}
 
 	sess, err = session.NewSession(
 		&aws.Config{
