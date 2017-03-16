@@ -6,10 +6,6 @@ import (
 
 // Associate ClowdWatchEvent Rule and descripbed Rule(name based)
 func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []Rule {
-	if l := len(cweRules) - len(describedRules); l > 0 {
-		r := make([]Rule, l)
-		describedRules = append(describedRules, r...)
-	}
 	dupCWERules := make([]*cloudwatchevents.Rule, len(cweRules))
 	copy(dupCWERules, cweRules)
 
@@ -24,11 +20,9 @@ func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []
 	}
 	if len(dupCWERules) > 0 {
 		for _, dupRule := range dupCWERules {
-			for j, rule := range describedRules {
-				if rule.ActualRule.Arn == nil {
-					describedRules[j].ActualRule = *dupRule
-				}
-			}
+			describedRules = append(describedRules, Rule{
+				ActualRule: *dupRule,
+			})
 		}
 	}
 	return describedRules
