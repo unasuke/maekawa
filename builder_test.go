@@ -72,6 +72,40 @@ func TestAssociateRules(t *testing.T) {
 			t.Errorf("result2[%d] (empty) should associate 'test-1' but associated %s", i, *r.ActualRule.Name)
 		}
 	}
+
+	cweRules2 := []*cloudwatchevents.Rule{
+		&cloudwatchevents.Rule{
+			Arn:                aws.String("arn:aws:events:ap-northeast-1:000000000000:rule/test-1"),
+			Description:        aws.String("Test rule 1"),
+			EventPattern:       nil,
+			Name:               aws.String("test-1"),
+			RoleArn:            nil,
+			ScheduleExpression: aws.String("cron(0 20 * * ? *)"),
+			State:              aws.String("ENABLED"),
+		},
+	}
+
+	describedRules3 := []Rule{
+		Rule{
+			Description:        "Test rule 2",
+			EventPattern:       "",
+			Name:               "test-2",
+			ScheduleExpression: "cron(0 20 2 * ? *)",
+			State:              "ENABLED",
+		},
+	}
+	result3 := AssociateRules(cweRules2, describedRules3)
+	if l := len(result3); l != 2 {
+		t.Errorf("result3 length should 2 but length is %d", l)
+	}
+	for i, r := range result3 {
+		if r.Name == "test-2" && r.ActualRule.Name != nil {
+			t.Errorf("result3[%d] should associate empty but associated %s", i, *r.ActualRule.Name)
+		}
+		if r.Name == "" && *r.ActualRule.Name != "test-1" {
+			t.Errorf("result3[%d] (empty) should associate 'test-1' but associated %s", i, *r.ActualRule.Name)
+		}
+	}
 }
 
 func TestAssociateTargets(t *testing.T) {
