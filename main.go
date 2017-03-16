@@ -39,7 +39,7 @@ func main() {
 		},
 	)
 	if err != nil {
-		fmt.Printf("Session error %v\n", err)
+		fmt.Println("Session error\n", err)
 		os.Exit(1)
 	}
 
@@ -48,14 +48,14 @@ func main() {
 
 	cweRulesBeforeApply, err = cweClient.ListRules(nil)
 	if err != nil {
-		fmt.Printf("API error %v\n", err)
+		fmt.Println("API error\n", err)
 		os.Exit(1)
 	}
 
 	describedRules := Rules{}
 	err = loadYaml(file, &describedRules)
 	if err != nil {
-		fmt.Printf("File error %v\n", err)
+		fmt.Println("File error\n", err)
 		os.Exit(1)
 	}
 
@@ -70,13 +70,13 @@ func main() {
 	if apply && !dryrun {
 		err = updateCloudWatchEvents(cweClient, describedRules.Rules)
 		if err != nil {
-			fmt.Printf("API error %v\n", err)
+			fmt.Println("API error\n", err)
 			os.Exit(1)
 		}
 
 		err = removePermissonFromLambda(lambdaClient, describedRules.Rules)
 		if err != nil {
-			fmt.Printf("API error %v\n", err)
+			fmt.Println("API error\n", err)
 			os.Exit(1)
 		}
 
@@ -90,7 +90,7 @@ func main() {
 
 		err = addPermissionToLambdaFromCloudWatchEvents(lambdaClient, describedRules.Rules)
 		if err != nil {
-			fmt.Print("Grant permission error %v\n", err)
+			fmt.Println("Grant permission error\n", err)
 		}
 	}
 }
