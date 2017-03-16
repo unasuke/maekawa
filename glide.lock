@@ -1,8 +1,8 @@
-hash: c3019b86a7f455ade2d25982ff4e1f8ecd74b7856e868c87b3e8e924f5723659
-updated: 2017-02-24T15:45:27.012503356+09:00
+hash: 2fb1ea0f36fc18b1b8a70c385b8d1baa3f5f7d656d9ce72994546da46584616f
+updated: 2017-03-09T22:16:29.123466216+09:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: f4b2120243b92fc47d6a4af71b854b8d5f4de8b5
+  version: 0e9d407f5635155ef9d4f1fd5c078e9aa236c177
   subpackages:
   - aws
   - aws/awserr
@@ -26,8 +26,10 @@ imports:
   - private/protocol/query
   - private/protocol/query/queryutil
   - private/protocol/rest
+  - private/protocol/restjson
   - private/protocol/xml/xmlutil
   - service/cloudwatchevents
+  - service/lambda
   - service/sts
 - name: github.com/go-ini/ini
   version: c437d20015c2ab6454b7a66a13109ff0fb99e17a
