@@ -4,12 +4,12 @@ import (
 	cwe "github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
-// struct for store unmarshalized configuration yaml
+// Rules is for store unmarshalized configuration yaml
 type Rules struct {
 	Rules []Rule
 }
 
-// struct for expression CloudWatch Events Rule
+// Rule is for expression CloudWatch Events Rule
 type Rule struct {
 	Description        string   `yaml:"description"`
 	EventPattern       string   `yaml:"event_pattern"`
@@ -23,7 +23,7 @@ type Rule struct {
 	NeedDelete         bool
 }
 
-// struct for expression CloudWatch Events Target
+// Target is for expression CloudWatch Events Target
 type Target struct {
 	Arn          string `yaml:"arn"`
 	Id           string `yaml:"id"`
@@ -34,14 +34,14 @@ type Target struct {
 	NeedDelete   bool
 }
 
-// struct for JSON that return from Lambda.GetPolicy
+// LambdaPolicy is for JSON that return from Lambda.GetPolicy
 type LambdaPolicy struct {
 	Version   string             `json:"Version"`
 	Id        string             `json:"Id"`
 	Statement *[]PolicyStatement `json:"Statement"`
 }
 
-// part of the LambdaPolicy
+// PolicyStatement is a part of the LambdaPolicy
 type PolicyStatement struct {
 	Resource    string           `json:"Resource"`
 	Condition   *PolicyCondition `json:"Condition"`
@@ -51,17 +51,17 @@ type PolicyStatement struct {
 	Action      string           `json:"Action"`
 }
 
-// part of the LambdaPolicy
+// PolicyCondition is a part of the LambdaPolicy
 type PolicyCondition struct {
 	ArnLike *PolicyArnLike `json:"ArnLike"`
 }
 
-// part of the LambdaPolicy
+// PolicyArnLike is a part of the LambdaPolicy
 type PolicyArnLike struct {
 	AwsSourceArn string `json:"AWS:SourceArn"`
 }
 
-// part of the LambdaPolicy
+// PolicyPrincipal is a part of the LambdaPolicy
 type PolicyPrincipal struct {
 	Service string `json:"Service"`
 }

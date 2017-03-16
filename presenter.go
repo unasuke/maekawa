@@ -32,7 +32,7 @@ func displayWhatWillChange(rules []Rule) {
 	}
 }
 
-// return will be updated rules and targets
+// WillUpdateRulesAndTargets return will be updated rules and targets
 func WillUpdateRulesAndTargets(rules []Rule) []Rule {
 	u := make([]Rule, 0)
 	for _, rule := range rules {
@@ -50,7 +50,7 @@ func WillUpdateRulesAndTargets(rules []Rule) []Rule {
 	return u
 }
 
-// return will be deleted rules and targets
+// WillDeleteRulesAndTargets return will be deleted rules and targets
 func WillDeleteRulesAndTargets(rules []Rule) []Rule {
 	d := make([]Rule, 0)
 	for _, rule := range rules {
@@ -68,6 +68,7 @@ func WillDeleteRulesAndTargets(rules []Rule) []Rule {
 	return d
 }
 
+// ShowWillUpdateFieldInRule print what will rule changes to stdout
 func ShowWillUpdateFieldInRule(rule Rule) {
 	fmt.Printf("Rule: %s\n", rule.Name)
 	if !CompareString(&rule.Name, rule.ActualRule.Name) {
@@ -90,6 +91,7 @@ func ShowWillUpdateFieldInRule(rule Rule) {
 	}
 }
 
+// ShowWillUpdateFieldInTarget print what will target changes to stdout
 func ShowWillUpdateFieldInTarget(target Target) {
 	fmt.Printf("Target: %s\n", target.Arn)
 	if !CompareString(&target.Arn, target.ActualTarget.Arn) {
@@ -106,6 +108,7 @@ func ShowWillUpdateFieldInTarget(target Target) {
 	}
 }
 
+// ShowWillDeleteRule print the rule will delete to stdout
 func ShowWillDeleteRule(rule Rule) {
 	if rule.NeedDelete {
 		fmt.Printf("Rule: %s this will delete\n", *rule.ActualRule.Name)
@@ -114,6 +117,7 @@ func ShowWillDeleteRule(rule Rule) {
 	}
 }
 
+// ShowWillDeleteTarget print the target will delete to stdout
 func ShowWillDeleteTarget(target Target) {
 	fmt.Printf("Target: %s this will delete\n", *target.ActualTarget.Id)
 }

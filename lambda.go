@@ -87,10 +87,12 @@ func isAlreadyAddPermission(lc *lambda.Lambda, rule Rule, target Target) (bool, 
 	return false, nil
 }
 
+// IsLambdaFunction return true if passed arn is lambda
 func IsLambdaFunction(arn string) bool {
 	return strings.HasPrefix(arn, "arn:aws:lambda")
 }
 
+// LambdaFunctionNameFromArn return lambda function name from arn string
 func LambdaFunctionNameFromArn(arn string) string {
 	return strings.Split(arn, ":")[6]
 }
