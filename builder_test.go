@@ -160,6 +160,32 @@ func TestAssociateTargets(t *testing.T) {
 			t.Errorf("result2[%d] (empty) should associate 'Id1' but associated %s", i, *r.ActualTarget.Id)
 		}
 	}
+
+	testTargets3 := []Target{
+		Target{
+			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
+			Id:  "Id2",
+		},
+		Target{
+			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-3",
+			Id:  "Id3",
+		},
+	}
+	result3 := AssociateTargets(cweTargets, testTargets3)
+	if l := len(result3); l != 3 {
+		t.Errorf("testTargets3 length should be 3 but length is %d", l)
+	}
+	for i, r := range result3 {
+		if r.Id == "" && *r.ActualTarget.Id != "Id1" {
+			t.Errorf("ActualTarget 'Id1' should associate empty target but associated %s", r.Id)
+		}
+		if r.Id == "Id2" && r.Arn != *r.ActualTarget.Arn {
+			t.Errorf("result3[%d] should associate 'Id2' but associated %s", i, *r.ActualTarget.Id)
+		}
+		if r.Id == "Id3" && r.ActualTarget.Id != nil {
+			t.Errorf("result3[%d] (empty) should associate empty ActualTarget but associated %s", i, *r.ActualTarget.Id)
+		}
+	}
 }
 
 func TestJudgeRuleNeedUpdate(t *testing.T) {
