@@ -15,7 +15,7 @@ import (
 )
 
 // Version of the maekawa
-var Version = "0.3.0"
+var Version = "0.4.0"
 
 func main() {
 	var (

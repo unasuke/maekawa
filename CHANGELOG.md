@@ -1,3 +1,9 @@
+## v0.4.0 (2017-03-16)
+- Update dependency packages (#5)
+- Cosmetic code (#6)
+- Improve associate algorithm between actual and described (#7)
+- Add command option for print self version to stdout (#8)
+
 ## v0.3.0 (2017-03-09)
 - Grant(or remove) permission to lambda function for invoke from CloudWatch Events (#4)
 
