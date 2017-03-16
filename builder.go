@@ -30,10 +30,6 @@ func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []
 
 func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []Target) []Target {
 	// if ClowdWatchEvents Targets is more than declareted targets, append number of lack target{}
-	if l := len(cweTargets) - len(describedTargets); l > 0 {
-		t := make([]Target, l)
-		describedTargets = append(describedTargets, t...)
-	}
 	dupCWETargets := make([]*cloudwatchevents.Target, len(cweTargets))
 	copy(dupCWETargets, cweTargets)
 
@@ -48,14 +44,11 @@ func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []
 	}
 	if len(dupCWETargets) > 0 {
 		for _, dupTarget := range dupCWETargets {
-			for j, target := range describedTargets {
-				if target.ActualTarget.Arn == nil {
-					describedTargets[j].ActualTarget = *dupTarget
-				}
-			}
+			describedTargets = append(describedTargets, Target{
+				ActualTarget: *dupTarget,
+			})
 		}
 	}
-
 	return describedTargets
 }
 
