@@ -111,6 +111,17 @@ func ShowWillUpdateFieldInTarget(target Target) {
 	if !CompareString(&target.InputPath, target.ActualTarget.InputPath) {
 		fmt.Printf("    InputPath: %s  ->  %s\n", NilSafeStr(target.ActualTarget.InputPath), target.InputPath)
 	}
+	if !CompareString(&target.RoleArn, target.ActualTarget.RoleArn) {
+		fmt.Printf("    RoleArn: %s  ->  %s\n", NilSafeStr(target.ActualTarget.RoleArn), target.RoleArn)
+	}
+	if !CompareEcsParameters(&target.EcsParameters, target.ActualTarget.EcsParameters) {
+		fmt.Println("    EcsParameters:")
+		ShowDiffOfTheEcsParameters(target.ActualTarget.EcsParameters, target.EcsParameters)
+	}
+	if !CompareKinesisParameters(&target.KinesisParameters, target.ActualTarget.KinesisParameters) {
+		fmt.Println("    KinesisParameters:")
+		ShowDiffOfTheKinesisParameters(target.ActualTarget.KinesisParameters, target.KinesisParameters)
+	}
 }
 
 // ShowDiffOfTheEcsParameters print what will EcsParameters in target changes to stdout
