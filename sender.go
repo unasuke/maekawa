@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	cwe "github.com/aws/aws-sdk-go/service/cloudwatchevents"
 )
 
@@ -70,16 +71,35 @@ func updateCloudWatchEventTarget(client *cwe.CloudWatchEvents, rule Rule, target
 		_, err := client.PutTargets(&cwe.PutTargetsInput{
 			Rule: NilOrStringPtr(rule.Name),
 			Targets: []*cwe.Target{
-				{
-					Arn:       NilOrStringPtr(target.Arn),
-					Id:        NilOrStringPtr(target.Id),
-					Input:     NilOrStringPtr(target.Input),
-					InputPath: NilOrStringPtr(target.InputPath),
-				},
+				buildTarget(target),
 			},
 		})
 		return err
 	}
 
 	return nil
+}
+
+func buildTarget(t Target) *cwe.Target {
+	var target cwe.Target
+	target.Arn = NilOrStringPtr(t.Arn)
+	target.Id = NilOrStringPtr(t.Id)
+	target.Input = NilOrStringPtr(t.Input)
+	target.InputPath = NilOrStringPtr(t.InputPath)
+	target.RoleArn = NilOrStringPtr(t.RoleArn)
+
+	if t.EcsParameters.TaskDefinitionArn != "" && t.EcsParameters.TaskCount != 0 {
+		target.EcsParameters = &cwe.EcsParameters{
+			TaskDefinitionArn: NilOrStringPtr(t.EcsParameters.TaskDefinitionArn),
+			TaskCount:         aws.Int64(t.EcsParameters.TaskCount),
+		}
+	}
+
+	if t.KinesisParameters.PartitionKeyPath != "" {
+		target.KinesisParameters = &cwe.KinesisParameters{
+			PartitionKeyPath: NilOrStringPtr(t.KinesisParameters.PartitionKeyPath),
+		}
+	}
+
+	return &target
 }
