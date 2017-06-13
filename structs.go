@@ -25,13 +25,27 @@ type Rule struct {
 
 // Target is for expression CloudWatch Events Target
 type Target struct {
-	Arn          string `yaml:"arn"`
-	Id           string `yaml:"id"`
-	Input        string `yaml:"input"`
-	InputPath    string `yaml:"input_path"`
-	ActualTarget cwe.Target
-	NeedUpdate   bool
-	NeedDelete   bool
+	Arn               string            `yaml:"arn"`
+	Id                string            `yaml:"id"`
+	Input             string            `yaml:"input"`
+	InputPath         string            `yaml:"input_path"`
+	EcsParameters     EcsParameters     `yaml:"ecs_parameters"`
+	KinesisParameters KinesisParameters `yaml:"kinesis_parameters"`
+	RoleArn           string            `yaml:"role_arn"`
+	ActualTarget      cwe.Target
+	NeedUpdate        bool
+	NeedDelete        bool
+}
+
+// EcsParameters is a part of the Target
+type EcsParameters struct {
+	TaskCount         int64  `yaml:"task_count"`
+	TaskDefinitionArn string `yaml:"task_definition_arn"`
+}
+
+// KinesisParameters is a part of the Target
+type KinesisParameters struct {
+	PartitionKeyPath string `yaml:"partition_key_path"`
 }
 
 // LambdaPolicy is for JSON that return from Lambda.GetPolicy
