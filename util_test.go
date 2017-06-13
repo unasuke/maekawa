@@ -33,6 +33,26 @@ func TestCompareString(t *testing.T) {
 	}
 }
 
+func TestCompareInt64(t *testing.T) {
+	var integer1, integer2 int64 = 1, 2
+
+	if !CompareInt64(&integer1, &integer1) {
+		t.Errorf("should true 1 == 1")
+	}
+
+	if CompareInt64(&integer1, &integer2) {
+		t.Errorf("should false 1 == 2")
+	}
+
+	if CompareInt64(&integer1, nil) {
+		t.Errorf("should false 1 == nil")
+	}
+
+	if !CompareInt64(nil, nil) {
+		t.Errorf("should true nil == nil")
+	}
+}
+
 func TestDeleteRuleFromSlice(t *testing.T) {
 	cweRules := []*cwe.Rule{
 		&cwe.Rule{

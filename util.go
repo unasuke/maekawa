@@ -24,6 +24,23 @@ func CompareString(a, b *string) bool {
 	return *a == *b
 }
 
+// CompareInt64 do compare Int64
+// 1 == 1 => true
+// 1 == 2 => false
+// 1 == nil => false
+// nil == nil => true
+func CompareInt64(a, b *int64) bool {
+	if a == nil {
+		if b == nil {
+			return true
+		}
+		return false
+	} else if b == nil {
+		return false
+	}
+	return *a == *b
+}
+
 // DeleteRuleFromSlice return ClowdWatchEvent Rules that deleted specified index rule.
 func DeleteRuleFromSlice(src []*cwe.Rule, deleteIndex int) []*cwe.Rule {
 	dest := []*cwe.Rule{}
