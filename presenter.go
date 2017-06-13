@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/aws/aws-sdk-go/service/cloudwatchevents"
+)
 
 func displayWhatWillChange(rules []Rule) {
 	updates := WillUpdateRulesAndTargets(rules)
@@ -106,6 +111,32 @@ func ShowWillUpdateFieldInTarget(target Target) {
 	if !CompareString(&target.InputPath, target.ActualTarget.InputPath) {
 		fmt.Printf("    InputPath: %s  ->  %s\n", NilSafeStr(target.ActualTarget.InputPath), target.InputPath)
 	}
+}
+
+// ShowDiffOfTheEcsParameters print what will EcsParameters in target changes to stdout
+func ShowDiffOfTheEcsParameters(current *cloudwatchevents.EcsParameters, expect EcsParameters) {
+	var currTaskDefinitionArn, currTaskCount string
+	if current != nil {
+		currTaskDefinitionArn = *current.TaskDefinitionArn
+		currTaskCount = strconv.FormatInt(*current.TaskCount, 10)
+	}
+
+	if !CompareString(current.TaskDefinitionArn, &expect.TaskDefinitionArn) {
+		fmt.Printf("      TaskDefinitionArn: %s  ->  %s\n", currTaskDefinitionArn, expect.TaskDefinitionArn)
+	}
+
+	if !CompareInt64(current.TaskCount, &expect.TaskCount) {
+		fmt.Printf("      TaskCount: %s  ->  %d\n", currTaskCount, expect.TaskCount)
+	}
+}
+
+// ShowDiffOfTheKinesisParameters print what will KinesisParameters in target changes to stdout
+func ShowDiffOfTheKinesisParameters(current *cloudwatchevents.KinesisParameters, expect KinesisParameters) {
+	var currPart string
+	if current != nil {
+		currPart = *current.PartitionKeyPath
+	}
+	fmt.Printf("      PartitionKeyPath: %s  ->  %s\n", currPart, expect.PartitionKeyPath)
 }
 
 // ShowWillDeleteRule print the rule will delete to stdout
