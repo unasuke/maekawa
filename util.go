@@ -41,6 +41,21 @@ func CompareInt64(a, b *int64) bool {
 	return *a == *b
 }
 
+// CompareEcsParameters do compare EcsParameters and cloudwatchevents.EcsParameters
+func CompareEcsParameters(own *EcsParameters, theirs *cwe.EcsParameters) bool {
+	if theirs == nil {
+		if own.TaskDefinitionArn == "" && own.TaskCount == 0 {
+			return true
+		}
+	} else {
+		if CompareString(&own.TaskDefinitionArn, theirs.TaskDefinitionArn) &&
+			CompareInt64(&own.TaskCount, theirs.TaskCount) {
+			return true
+		}
+	}
+	return false
+}
+
 // DeleteRuleFromSlice return ClowdWatchEvent Rules that deleted specified index rule.
 func DeleteRuleFromSlice(src []*cwe.Rule, deleteIndex int) []*cwe.Rule {
 	dest := []*cwe.Rule{}

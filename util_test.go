@@ -53,6 +53,44 @@ func TestCompareInt64(t *testing.T) {
 	}
 }
 
+func TestCompareEcsParameters(t *testing.T) {
+	ownEcs1 := EcsParameters{
+		TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3",
+		TaskCount:         2,
+	}
+
+	ownEcs2 := EcsParameters{
+		TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:4",
+		TaskCount:         1,
+	}
+
+	ownEcsEmpty := EcsParameters{
+		TaskDefinitionArn: "",
+		TaskCount:         0,
+	}
+
+	theirsEcs1 := cwe.EcsParameters{
+		TaskDefinitionArn: aws.String("arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3"),
+		TaskCount:         aws.Int64(2),
+	}
+
+	if !CompareEcsParameters(&ownEcsEmpty, nil) {
+		t.Errorf("should return true when compare ownEcsEmpty and nil")
+	}
+
+	if !CompareEcsParameters(&ownEcs1, &theirsEcs1) {
+		t.Errorf("should return true when compare ownEcs1 and theirsEcs1")
+	}
+
+	if CompareEcsParameters(&ownEcs1, nil) {
+		t.Errorf("should return false when compare ownEcs1 and nil")
+	}
+
+	if CompareEcsParameters(&ownEcs2, &theirsEcs1) {
+		t.Errorf("should return false when compare ownEcs2 and theirsEcs1")
+	}
+}
+
 func TestDeleteRuleFromSlice(t *testing.T) {
 	cweRules := []*cwe.Rule{
 		&cwe.Rule{
