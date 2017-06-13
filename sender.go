@@ -83,7 +83,7 @@ func updateCloudWatchEventTarget(client *cwe.CloudWatchEvents, rule Rule, target
 func buildTarget(t Target) *cwe.Target {
 	var target cwe.Target
 	target.Arn = NilOrStringPtr(t.Arn)
-	target.Id = NilOrStringPtr(t.Id)
+	target.Id = NilOrStringPtr(t.ID)
 	target.Input = NilOrStringPtr(t.Input)
 	target.InputPath = NilOrStringPtr(t.InputPath)
 	target.RoleArn = NilOrStringPtr(t.RoleArn)

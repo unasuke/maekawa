@@ -102,8 +102,8 @@ func ShowWillUpdateFieldInTarget(target Target) {
 	if !CompareString(&target.Arn, target.ActualTarget.Arn) {
 		fmt.Printf("    Arn: %s  ->  %s\n", NilSafeStr(target.ActualTarget.Arn), target.Arn)
 	}
-	if !CompareString(&target.Id, target.ActualTarget.Id) {
-		fmt.Printf("    Id: %s  ->  %s\n", NilSafeStr(target.ActualTarget.Id), target.Id)
+	if !CompareString(&target.ID, target.ActualTarget.Id) {
+		fmt.Printf("    ID: %s  ->  %s\n", NilSafeStr(target.ActualTarget.Id), target.ID)
 	}
 	if !CompareString(&target.Input, target.ActualTarget.Input) {
 		fmt.Printf("    Input: %s  ->  %s\n", NilSafeStr(target.ActualTarget.Input), target.Input)

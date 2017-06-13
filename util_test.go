@@ -160,11 +160,11 @@ func TestDeleteTargetFromSlice(t *testing.T) {
 	cweTargets := []*cwe.Target{
 		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-			Id:  aws.String("Id1"),
+			Id:  aws.String("ID1"),
 		},
 		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-			Id:  aws.String("Id2"),
+			Id:  aws.String("ID2"),
 		},
 	}
 
@@ -172,7 +172,7 @@ func TestDeleteTargetFromSlice(t *testing.T) {
 	if len(result) != 1 {
 		t.Errorf("should return deleted slice")
 	}
-	if *result[0].Id != "Id1" {
+	if *result[0].Id != "ID1" {
 		t.Errorf("should deleted second target(index is 1)")
 	}
 }

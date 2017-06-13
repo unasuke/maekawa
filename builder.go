@@ -28,7 +28,7 @@ func AssociateRules(cweRules []*cloudwatchevents.Rule, describedRules []Rule) []
 	return describedRules
 }
 
-// AssociateTargets is asociate ClowdWatchEvent targets and descripbed targets(Id based)
+// AssociateTargets is asociate ClowdWatchEvent targets and descripbed targets(ID based)
 func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []Target) []Target {
 	// if ClowdWatchEvents Targets is more than declareted targets, append number of lack target{}
 	dupCWETargets := make([]*cloudwatchevents.Target, len(cweTargets))
@@ -36,7 +36,7 @@ func AssociateTargets(cweTargets []*cloudwatchevents.Target, describedTargets []
 
 	for i, target := range describedTargets {
 		for j, cweTarget := range dupCWETargets {
-			if CompareString(&target.Arn, cweTarget.Arn) && CompareString(&target.Id, cweTarget.Id) {
+			if CompareString(&target.Arn, cweTarget.Arn) && CompareString(&target.ID, cweTarget.Id) {
 				describedTargets[i].ActualTarget = *cweTarget
 				dupCWETargets = DeleteTargetFromSlice(dupCWETargets, j)
 				break
@@ -82,7 +82,7 @@ func JudgeRuleNeedDelete(r *Rule) {
 // compare target and ActualTarget
 func JudgeTargetNeedUpdate(t *Target) {
 	if !CompareString(&t.Arn, t.ActualTarget.Arn) ||
-		!CompareString(&t.Id, t.ActualTarget.Id) ||
+		!CompareString(&t.ID, t.ActualTarget.Id) ||
 		!CompareString(&t.Input, t.ActualTarget.Input) ||
 		!CompareString(&t.InputPath, t.ActualTarget.InputPath) ||
 		!CompareString(&t.RoleArn, t.ActualTarget.RoleArn) ||
@@ -95,7 +95,7 @@ func JudgeTargetNeedUpdate(t *Target) {
 // JudgeTargetNeedDelete is judge the target need delete
 func JudgeTargetNeedDelete(t *Target) {
 	if t.Arn == "" &&
-		t.Id == "" &&
+		t.ID == "" &&
 		t.ActualTarget.Arn != nil {
 		t.NeedDelete = true
 	}

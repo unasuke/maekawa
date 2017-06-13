@@ -13,7 +13,7 @@ func TestWillUpdateRulesAndTargets(t *testing.T) {
 			NeedUpdate: false,
 			Targets: []Target{
 				{
-					Id:         "Target1",
+					ID:         "Target1",
 					NeedUpdate: true,
 				},
 			},
@@ -46,7 +46,7 @@ func TestWillDeleteRulesAndTargets(t *testing.T) {
 			NeedDelete: false,
 			Targets: []Target{
 				{
-					Id:         "Target1",
+					ID:         "Target1",
 					NeedDelete: true,
 				},
 			},

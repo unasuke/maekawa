@@ -26,7 +26,7 @@ type Rule struct {
 // Target is for expression CloudWatch Events Target
 type Target struct {
 	Arn               string            `yaml:"arn"`
-	Id                string            `yaml:"id"`
+	ID                string            `yaml:"id"`
 	Input             string            `yaml:"input"`
 	InputPath         string            `yaml:"input_path"`
 	EcsParameters     EcsParameters     `yaml:"ecs_parameters"`
@@ -51,7 +51,7 @@ type KinesisParameters struct {
 // LambdaPolicy is for JSON that return from Lambda.GetPolicy
 type LambdaPolicy struct {
 	Version   string             `json:"Version"`
-	Id        string             `json:"Id"`
+	ID        string             `json:"Id"`
 	Statement *[]PolicyStatement `json:"Statement"`
 }
 
@@ -59,7 +59,7 @@ type LambdaPolicy struct {
 type PolicyStatement struct {
 	Resource    string           `json:"Resource"`
 	Condition   *PolicyCondition `json:"Condition"`
-	StatementId string           `json:"Sid"`
+	StatementID string           `json:"Sid"`
 	Effect      string           `json:"Effect"`
 	Principal   *PolicyPrincipal `json:"Principal"`
 	Action      string           `json:"Action"`
