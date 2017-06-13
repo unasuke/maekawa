@@ -308,6 +308,50 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 	if target2.NeedUpdate == false {
 		t.Errorf("target2 should need update")
 	}
+
+	target3 := Target{
+		Arn:     "arn:aws:ecs:ap-northeast-1:000000000:cluster/sample",
+		Id:      "Id3",
+		RoleArn: "arn:aws:iam::0000000000:role/service-role/sample-role",
+		EcsParameters: EcsParameters{
+			TaskCount:         1,
+			TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3",
+		},
+		ActualTarget: cloudwatchevents.Target{
+			Arn:     aws.String("arn:aws:ecs:ap-northeast-1:000000000:cluster/sample"),
+			Id:      aws.String("Id3"),
+			RoleArn: aws.String("arn:aws:iam::0000000000:role/service-role/sample-role"),
+			EcsParameters: &cloudwatchevents.EcsParameters{
+				TaskCount:         aws.Int64(2),
+				TaskDefinitionArn: aws.String("arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3"),
+			},
+		},
+	}
+	JudgeTargetNeedUpdate(&target3)
+	if target3.NeedUpdate == false {
+		t.Errorf("target3 should need update")
+	}
+
+	target4 := Target{
+		Arn:     "arn:aws:ecs:ap-northeast-1:000000000:cluster/sample",
+		Id:      "Id4",
+		RoleArn: "arn:aws:iam::0000000000:role/service-role/sample-role",
+		KinesisParameters: KinesisParameters{
+			PartitionKeyPath: "path/to/key",
+		},
+		ActualTarget: cloudwatchevents.Target{
+			Arn:     aws.String("arn:aws:ecs:ap-northeast-1:000000000:cluster/sample"),
+			Id:      aws.String("Id4"),
+			RoleArn: aws.String("arn:aws:iam::0000000000:role/service-role/sample-role"),
+			KinesisParameters: &cloudwatchevents.KinesisParameters{
+				PartitionKeyPath: aws.String("path/to/key"),
+			},
+		},
+	}
+	JudgeTargetNeedUpdate(&target4)
+	if target4.NeedUpdate == true {
+		t.Errorf("target4 should not need update")
+	}
 }
 
 func TestJudgeTargetNeedDelete(t *testing.T) {

@@ -84,7 +84,10 @@ func JudgeTargetNeedUpdate(t *Target) {
 	if !CompareString(&t.Arn, t.ActualTarget.Arn) ||
 		!CompareString(&t.Id, t.ActualTarget.Id) ||
 		!CompareString(&t.Input, t.ActualTarget.Input) ||
-		!CompareString(&t.InputPath, t.ActualTarget.InputPath) {
+		!CompareString(&t.InputPath, t.ActualTarget.InputPath) ||
+		!CompareString(&t.RoleArn, t.ActualTarget.RoleArn) ||
+		!CompareEcsParameters(&t.EcsParameters, t.ActualTarget.EcsParameters) ||
+		!CompareKinesisParameters(&t.KinesisParameters, t.ActualTarget.KinesisParameters) {
 		t.NeedUpdate = true
 	}
 }
