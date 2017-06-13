@@ -41,6 +41,20 @@ func CompareInt64(a, b *int64) bool {
 	return *a == *b
 }
 
+// CompareKinesisParameters do compare KinesisParameters and cloudwatchevents.KinesisParameters
+func CompareKinesisParameters(own *KinesisParameters, theirs *cwe.KinesisParameters) bool {
+	if theirs == nil {
+		if own.PartitionKeyPath == "" {
+			return true
+		}
+	} else {
+		if CompareString(&own.PartitionKeyPath, theirs.PartitionKeyPath) {
+			return true
+		}
+	}
+	return false
+}
+
 // CompareEcsParameters do compare EcsParameters and cloudwatchevents.EcsParameters
 func CompareEcsParameters(own *EcsParameters, theirs *cwe.EcsParameters) bool {
 	if theirs == nil {

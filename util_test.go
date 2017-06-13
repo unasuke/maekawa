@@ -91,6 +91,40 @@ func TestCompareEcsParameters(t *testing.T) {
 	}
 }
 
+func TestCompareKinesisParameters(t *testing.T) {
+	ownKinesis1 := KinesisParameters{
+		PartitionKeyPath: "some/key/path",
+	}
+
+	ownKinesis2 := KinesisParameters{
+		PartitionKeyPath: "another/key/path",
+	}
+
+	ownKinesisEmpty := KinesisParameters{
+		PartitionKeyPath: "",
+	}
+
+	theirsKinesis := cwe.KinesisParameters{
+		PartitionKeyPath: aws.String("some/key/path"),
+	}
+
+	if !CompareKinesisParameters(&ownKinesisEmpty, nil) {
+		t.Errorf("should return true when compare ownKinesisEmpty and nil")
+	}
+
+	if !CompareKinesisParameters(&ownKinesis1, &theirsKinesis) {
+		t.Errorf("should return true when compare ownKinesis1 and theirsKinesis")
+	}
+
+	if CompareKinesisParameters(&ownKinesis1, nil) {
+		t.Errorf("should return false when compare ownKinesis1 and nil")
+	}
+
+	if CompareKinesisParameters(&ownKinesis2, &theirsKinesis) {
+		t.Errorf("should return false when compare ownKinesis2 and theirsKinesis")
+	}
+}
+
 func TestDeleteRuleFromSlice(t *testing.T) {
 	cweRules := []*cwe.Rule{
 		&cwe.Rule{
