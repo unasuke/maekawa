@@ -1,3 +1,6 @@
+## v0.5.1 (2017-06-14)
+- Fix issue of SEGV by nil access when show what will changes (#13)
+
 ## v0.5.0 (2017-06-14)
 - Support `--profile` option (#11)
 - Support `EcsParameters`, `KinesisParameters`, and `RoleArn` parameters in target (#11)
