@@ -1,0 +1,50 @@
+rules:
+  -
+    name: EveryFiveMinutes
+    description: Execute every 5 minutes
+    event_pattern:
+    schedule_expression: "cron(0/5 * * * ? *)"
+    state: ENABLED
+    targets:
+      -
+        arn: arn:aws:lambda:ap-northeast-1:000000000000:function:some-lambda-function
+        id: 05c99eea-4059-4294-8583-bb2d00df4226
+        input:
+        input_path:
+  -
+    name: SomeEvent
+    schedule_expression: "rate(2 day)"
+    state: ENABLED
+    targets:
+      -
+        arn: arn:aws:lambda:ap-northeast-1:000000000000:function:another-lambda-function
+        id: 4c4d91c5-5f8b-4d5f-b28f-3fac49c835ad
+        input: |
+          { "input": "json input" }
+        input_path:
+      -
+        arn: arn:aws:lambda:ap-northeast-1:00000000000:function:another-lambda-function
+        id: 3bde837b-3093-487c-9328-a677e05ae75d
+        input: |
+          { "input": "some input" }
+        input_path:
+  -
+    name: TestEcsEvent
+    schedule_expression: "rate(1 day)"
+    state: DIABLED
+    targets:
+      -
+        arn: arn:aws:ecs:ap-northeast-1:00000000000:cluster/sample-cluster
+        id: d00382c3-357c-41e5-ab0b-1b11b99589ad
+        ecs_parameters:
+          task_definition_arn: arn:aws:ecs:ap-northeast-1:000000000000:task-definition/tada-riina:4
+          task_count: 2
+  -
+    name: RebootInstance
+    schedule_expression: rate(10 minutes)
+    state: ENABLED
+    targets:
+      -
+        arn: arn:aws:automation:ap-northeast-1:000000000000:action/EC2RebootInstance/EC2RebootInstance_test-reboot-instance
+        id: 5d61a87d-eca8-4892-b65d-a8a0f1efffd1
+        input: "\"arn:aws:ec2:ap-northeast-1:000000000000:instance/i-005b7a84d1c8f4b23\""
