@@ -33,6 +33,98 @@ func TestCompareString(t *testing.T) {
 	}
 }
 
+func TestCompareInt64(t *testing.T) {
+	var integer1, integer2 int64 = 1, 2
+
+	if !CompareInt64(&integer1, &integer1) {
+		t.Errorf("should true 1 == 1")
+	}
+
+	if CompareInt64(&integer1, &integer2) {
+		t.Errorf("should false 1 == 2")
+	}
+
+	if CompareInt64(&integer1, nil) {
+		t.Errorf("should false 1 == nil")
+	}
+
+	if !CompareInt64(nil, nil) {
+		t.Errorf("should true nil == nil")
+	}
+}
+
+func TestCompareEcsParameters(t *testing.T) {
+	ownEcs1 := EcsParameters{
+		TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3",
+		TaskCount:         2,
+	}
+
+	ownEcs2 := EcsParameters{
+		TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:4",
+		TaskCount:         1,
+	}
+
+	ownEcsEmpty := EcsParameters{
+		TaskDefinitionArn: "",
+		TaskCount:         0,
+	}
+
+	theirsEcs1 := cwe.EcsParameters{
+		TaskDefinitionArn: aws.String("arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3"),
+		TaskCount:         aws.Int64(2),
+	}
+
+	if !CompareEcsParameters(&ownEcsEmpty, nil) {
+		t.Errorf("should return true when compare ownEcsEmpty and nil")
+	}
+
+	if !CompareEcsParameters(&ownEcs1, &theirsEcs1) {
+		t.Errorf("should return true when compare ownEcs1 and theirsEcs1")
+	}
+
+	if CompareEcsParameters(&ownEcs1, nil) {
+		t.Errorf("should return false when compare ownEcs1 and nil")
+	}
+
+	if CompareEcsParameters(&ownEcs2, &theirsEcs1) {
+		t.Errorf("should return false when compare ownEcs2 and theirsEcs1")
+	}
+}
+
+func TestCompareKinesisParameters(t *testing.T) {
+	ownKinesis1 := KinesisParameters{
+		PartitionKeyPath: "some/key/path",
+	}
+
+	ownKinesis2 := KinesisParameters{
+		PartitionKeyPath: "another/key/path",
+	}
+
+	ownKinesisEmpty := KinesisParameters{
+		PartitionKeyPath: "",
+	}
+
+	theirsKinesis := cwe.KinesisParameters{
+		PartitionKeyPath: aws.String("some/key/path"),
+	}
+
+	if !CompareKinesisParameters(&ownKinesisEmpty, nil) {
+		t.Errorf("should return true when compare ownKinesisEmpty and nil")
+	}
+
+	if !CompareKinesisParameters(&ownKinesis1, &theirsKinesis) {
+		t.Errorf("should return true when compare ownKinesis1 and theirsKinesis")
+	}
+
+	if CompareKinesisParameters(&ownKinesis1, nil) {
+		t.Errorf("should return false when compare ownKinesis1 and nil")
+	}
+
+	if CompareKinesisParameters(&ownKinesis2, &theirsKinesis) {
+		t.Errorf("should return false when compare ownKinesis2 and theirsKinesis")
+	}
+}
+
 func TestDeleteRuleFromSlice(t *testing.T) {
 	cweRules := []*cwe.Rule{
 		&cwe.Rule{
@@ -68,11 +160,11 @@ func TestDeleteTargetFromSlice(t *testing.T) {
 	cweTargets := []*cwe.Target{
 		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-			Id:  aws.String("Id1"),
+			Id:  aws.String("ID1"),
 		},
 		&cwe.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-			Id:  aws.String("Id2"),
+			Id:  aws.String("ID2"),
 		},
 	}
 
@@ -80,7 +172,7 @@ func TestDeleteTargetFromSlice(t *testing.T) {
 	if len(result) != 1 {
 		t.Errorf("should return deleted slice")
 	}
-	if *result[0].Id != "Id1" {
+	if *result[0].Id != "ID1" {
 		t.Errorf("should deleted second target(index is 1)")
 	}
 }

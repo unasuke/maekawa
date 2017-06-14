@@ -26,7 +26,7 @@ func addPermissionToLambdaFromCloudWatchEvents(lc *lambda.Lambda, rules []Rule) 
 					FunctionName: aws.String(LambdaFunctionNameFromArn(target.Arn)),
 					Principal:    aws.String("events.amazonaws.com"),
 					SourceArn:    rule.ActualRule.Arn,
-					StatementId:  aws.String(target.Id),
+					StatementId:  aws.String(target.ID),
 				})
 
 				if errL != nil {
@@ -79,7 +79,7 @@ func isAlreadyAddPermission(lc *lambda.Lambda, rule Rule, target Target) (bool, 
 			statement.Effect == "Allow" &&
 			statement.Principal.Service == "events.amazonaws.com" &&
 			statement.Action == "lambda:InvokeFunction") ||
-			statement.StatementId == target.Id {
+			statement.StatementID == target.ID {
 			return true, nil
 		}
 	}

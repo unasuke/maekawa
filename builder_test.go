@@ -110,22 +110,22 @@ func TestAssociateTargets(t *testing.T) {
 	cweTargets := []*cloudwatchevents.Target{
 		&cloudwatchevents.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-			Id:  aws.String("Id1"),
+			Id:  aws.String("ID1"),
 		},
 		&cloudwatchevents.Target{
 			Arn: aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-			Id:  aws.String("Id2"),
+			Id:  aws.String("ID2"),
 		},
 	}
 
 	testTargets1 := []Target{
 		Target{
 			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
-			Id:  "Id2",
+			ID:  "ID2",
 		},
 		Target{
 			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
-			Id:  "Id1",
+			ID:  "ID1",
 		},
 	}
 
@@ -142,7 +142,7 @@ func TestAssociateTargets(t *testing.T) {
 	testTargets2 := []Target{
 		Target{
 			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
-			Id:  "Id2",
+			ID:  "ID2",
 		},
 	}
 
@@ -151,22 +151,22 @@ func TestAssociateTargets(t *testing.T) {
 		t.Errorf("testTargets2 length should be 2 but length is %d", l)
 	}
 	for i, r := range result2 {
-		if r.Id == "Id2" && r.Arn != *r.ActualTarget.Arn {
-			t.Errorf("result2[%d] should associate 'Id2' but associated %s", i, *r.ActualTarget.Id)
+		if r.ID == "ID2" && r.Arn != *r.ActualTarget.Arn {
+			t.Errorf("result2[%d] should associate 'ID2' but associated %s", i, *r.ActualTarget.Id)
 		}
-		if r.Id == "" && *r.ActualTarget.Id != "Id1" {
-			t.Errorf("result2[%d] (empty) should associate 'Id1' but associated %s", i, *r.ActualTarget.Id)
+		if r.ID == "" && *r.ActualTarget.Id != "ID1" {
+			t.Errorf("result2[%d] (empty) should associate 'ID1' but associated %s", i, *r.ActualTarget.Id)
 		}
 	}
 
 	testTargets3 := []Target{
 		Target{
 			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
-			Id:  "Id2",
+			ID:  "ID2",
 		},
 		Target{
 			Arn: "arn:aws:lambda:ap-northeast-1:000000000000:function:test-3",
-			Id:  "Id3",
+			ID:  "ID3",
 		},
 	}
 	result3 := AssociateTargets(cweTargets, testTargets3)
@@ -174,13 +174,13 @@ func TestAssociateTargets(t *testing.T) {
 		t.Errorf("testTargets3 length should be 3 but length is %d", l)
 	}
 	for i, r := range result3 {
-		if r.Id == "" && *r.ActualTarget.Id != "Id1" {
-			t.Errorf("ActualTarget 'Id1' should associate empty target but associated %s", r.Id)
+		if r.ID == "" && *r.ActualTarget.Id != "ID1" {
+			t.Errorf("ActualTarget 'ID1' should associate empty target but associated %s", r.ID)
 		}
-		if r.Id == "Id2" && r.Arn != *r.ActualTarget.Arn {
-			t.Errorf("result3[%d] should associate 'Id2' but associated %s", i, *r.ActualTarget.Id)
+		if r.ID == "ID2" && r.Arn != *r.ActualTarget.Arn {
+			t.Errorf("result3[%d] should associate 'ID2' but associated %s", i, *r.ActualTarget.Id)
 		}
-		if r.Id == "Id3" && r.ActualTarget.Id != nil {
+		if r.ID == "ID3" && r.ActualTarget.Id != nil {
 			t.Errorf("result3[%d] (empty) should associate empty ActualTarget but associated %s", i, *r.ActualTarget.Id)
 		}
 	}
@@ -279,11 +279,11 @@ func TestJudgeRuleNeedDelete(t *testing.T) {
 func TestJudgeTargetNeedUpdate(t *testing.T) {
 	target1 := Target{
 		Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
-		Id:    "Id1",
+		ID:    "ID1",
 		Input: "input",
 		ActualTarget: cloudwatchevents.Target{
 			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-			Id:        aws.String("Id1"),
+			Id:        aws.String("ID1"),
 			Input:     aws.String("input"),
 			InputPath: nil,
 		},
@@ -295,11 +295,11 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 
 	target2 := Target{
 		Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
-		Id:    "Id2",
+		ID:    "ID2",
 		Input: "input",
 		ActualTarget: cloudwatchevents.Target{
 			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-			Id:        aws.String("Id2"),
+			Id:        aws.String("ID2"),
 			Input:     aws.String("another input"),
 			InputPath: nil,
 		},
@@ -308,16 +308,60 @@ func TestJudgeTargetNeedUpdate(t *testing.T) {
 	if target2.NeedUpdate == false {
 		t.Errorf("target2 should need update")
 	}
+
+	target3 := Target{
+		Arn:     "arn:aws:ecs:ap-northeast-1:000000000:cluster/sample",
+		ID:      "ID3",
+		RoleArn: "arn:aws:iam::0000000000:role/service-role/sample-role",
+		EcsParameters: EcsParameters{
+			TaskCount:         1,
+			TaskDefinitionArn: "arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3",
+		},
+		ActualTarget: cloudwatchevents.Target{
+			Arn:     aws.String("arn:aws:ecs:ap-northeast-1:000000000:cluster/sample"),
+			Id:      aws.String("ID3"),
+			RoleArn: aws.String("arn:aws:iam::0000000000:role/service-role/sample-role"),
+			EcsParameters: &cloudwatchevents.EcsParameters{
+				TaskCount:         aws.Int64(2),
+				TaskDefinitionArn: aws.String("arn:aws:ecs:ap-northeast-1:000000000:task-definition/some-task:3"),
+			},
+		},
+	}
+	JudgeTargetNeedUpdate(&target3)
+	if target3.NeedUpdate == false {
+		t.Errorf("target3 should need update")
+	}
+
+	target4 := Target{
+		Arn:     "arn:aws:ecs:ap-northeast-1:000000000:cluster/sample",
+		ID:      "ID4",
+		RoleArn: "arn:aws:iam::0000000000:role/service-role/sample-role",
+		KinesisParameters: KinesisParameters{
+			PartitionKeyPath: "path/to/key",
+		},
+		ActualTarget: cloudwatchevents.Target{
+			Arn:     aws.String("arn:aws:ecs:ap-northeast-1:000000000:cluster/sample"),
+			Id:      aws.String("ID4"),
+			RoleArn: aws.String("arn:aws:iam::0000000000:role/service-role/sample-role"),
+			KinesisParameters: &cloudwatchevents.KinesisParameters{
+				PartitionKeyPath: aws.String("path/to/key"),
+			},
+		},
+	}
+	JudgeTargetNeedUpdate(&target4)
+	if target4.NeedUpdate == true {
+		t.Errorf("target4 should not need update")
+	}
 }
 
 func TestJudgeTargetNeedDelete(t *testing.T) {
 	target1 := Target{
 		Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
-		Id:    "Id1",
+		ID:    "ID1",
 		Input: "input",
 		ActualTarget: cloudwatchevents.Target{
 			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-			Id:        aws.String("Id1"),
+			Id:        aws.String("ID1"),
 			Input:     aws.String("input"),
 			InputPath: nil,
 		},
@@ -329,11 +373,11 @@ func TestJudgeTargetNeedDelete(t *testing.T) {
 
 	target2 := Target{
 		Arn:   "",
-		Id:    "",
+		ID:    "",
 		Input: "",
 		ActualTarget: cloudwatchevents.Target{
 			Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-			Id:        aws.String("Id2"),
+			Id:        aws.String("ID2"),
 			Input:     aws.String("another input"),
 			InputPath: nil,
 		},
@@ -364,11 +408,11 @@ func TestCheckIsNeedUpdateOrDelete(t *testing.T) {
 			Targets: []Target{
 				Target{
 					Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-1",
-					Id:    "Id1",
+					ID:    "ID1",
 					Input: "input",
 					ActualTarget: cloudwatchevents.Target{
 						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-1"),
-						Id:        aws.String("Id1"),
+						Id:        aws.String("ID1"),
 						Input:     aws.String("input"),
 						InputPath: nil,
 					},
@@ -393,11 +437,11 @@ func TestCheckIsNeedUpdateOrDelete(t *testing.T) {
 			Targets: []Target{
 				Target{
 					Arn:   "arn:aws:lambda:ap-northeast-1:000000000000:function:test-2",
-					Id:    "Id2",
+					ID:    "ID2",
 					Input: "input",
 					ActualTarget: cloudwatchevents.Target{
 						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-2"),
-						Id:        aws.String("Id2"),
+						Id:        aws.String("ID2"),
 						Input:     aws.String("another input"),
 						InputPath: nil,
 					},
@@ -422,11 +466,11 @@ func TestCheckIsNeedUpdateOrDelete(t *testing.T) {
 			Targets: []Target{
 				Target{
 					Arn:   "",
-					Id:    "",
+					ID:    "",
 					Input: "",
 					ActualTarget: cloudwatchevents.Target{
 						Arn:       aws.String("arn:aws:lambda:ap-northeast-1:000000000000:function:test-3"),
-						Id:        aws.String("Id3"),
+						Id:        aws.String("ID3"),
 						Input:     aws.String("will removed input"),
 						InputPath: nil,
 					},

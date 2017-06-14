@@ -20,9 +20,8 @@ var Version = "0.4.0"
 func main() {
 	var (
 		apply, dryrun, version                  bool
-		file, awsRegion                         string
+		file, awsRegion, awsProfile             string
 		err                                     error
-		sess                                    *session.Session
 		cweRulesBeforeApply, cweRulesAfterApply *cloudwatchevents.ListRulesOutput
 	)
 
@@ -33,6 +32,7 @@ func main() {
 	flag.StringVar(&file, "file", "config.yml", "file path to setting yaml")
 	flag.StringVar(&file, "f", "config.yml", "file path to setting yaml (shorthand)")
 	flag.StringVar(&awsRegion, "region", os.Getenv("AWS_REGION"), "aws region")
+	flag.StringVar(&awsProfile, "profile", os.Getenv("AWS_PROFILE"), "aws profile")
 	flag.Parse()
 
 	if version {
@@ -40,15 +40,12 @@ func main() {
 		os.Exit(0)
 	}
 
-	sess, err = session.NewSession(
-		&aws.Config{
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		Config: aws.Config{
 			Region: aws.String(awsRegion),
 		},
-	)
-	if err != nil {
-		fmt.Println("Session error\n", err)
-		os.Exit(1)
-	}
+		Profile: awsProfile,
+	}))
 
 	cweClient := cloudwatchevents.New(sess)
 	lambdaClient := lambda.New(sess)

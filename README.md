@@ -1,7 +1,8 @@
 # maekawa
 [![Build Status](https://travis-ci.org/unasuke/maekawa.svg?branch=master)](https://travis-ci.org/unasuke/maekawa)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0adc1c0207354db9948fea0ea4cf8e98)](https://www.codacy.com/app/unasuke/maekawa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=unasuke/maekawa&amp;utm_campaign=Badge_Grade)
 
-Maekawa is a client for AWS CloudWatch Events has idempotence.
+Maekawa is a cli client for AWS CloudWatch Events has idempotence.
 
 Japanese version is under the English version.
 (日本語のREADMEが英語の下にあります)
@@ -66,6 +67,8 @@ rules:
         input_path:
 ```
 
+More example's in [sample.yml](https://github.com/unasuke/maekawa/blob/master/sample.yml).
+
 ### 3. run maekawa
 ```shell
 $ maekawa --region=ap-northeast-1 --apply --dry-run # check what will changes
@@ -76,6 +79,10 @@ $ maekawa --region=ap-northeast-1 --apply # apply config.yml
 ### --region
 Specify aws region.
 If set env `AWS_REGION`, use this. But, `--region` option is override env.
+
+### --profile
+Specify aws profile.
+If set env `AWS_PROFILE`, use this. But, `--profile` option is override env.
 
 ### --apply
 Apply your config to AWS CloudWatch Events.
@@ -105,7 +112,7 @@ https://github.com/go-yaml/yaml
 -----------------------------------
 
 # maekawa
-maekawaは冪等性を持つAWS CloudWatch Eventsのclientです。
+maekawaは冪等性を持つAWS CloudWatch Eventsのcli clientです。
 
 ## インストール方法
 最新版リリースの、適したアーキテクチャ向けのバイナリをreleaseページからダウンロードしてください。
@@ -167,6 +174,8 @@ rules:
         input_path:
 ```
 
+[sample.yml](https://github.com/unasuke/maekawa/blob/master/sample.yml)に他の例があります。
+
 ### 3. maekawaを実行する
 ```shell
 $ maekawa --region=ap-northeast-1 --apply --dry-run # 変更部分の確認
@@ -177,6 +186,10 @@ $ maekawa --region=ap-northeast-1 --apply # config.ymlの内容を適用
 ### --region
 AWS regionを指定します。
 環境変数に`AWS_REGION`が存在する場合それを使用しますが、`--region`が指定された場合はそちらで上書きます。
+
+### --profile
+AWS profileを指定します。
+環境変数に`AWS_PROFILE`が存在する場合それを使用しますが、`--profile`が指定された場合はそちらで上書きます。
 
 ### --apply
 configに記述された内容をAWS CloudWatch Eventsに適用します。
