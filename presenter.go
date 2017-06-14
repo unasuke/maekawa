@@ -132,11 +132,11 @@ func ShowDiffOfTheEcsParameters(current *cloudwatchevents.EcsParameters, expect 
 		currTaskCount = strconv.FormatInt(*current.TaskCount, 10)
 	}
 
-	if !CompareString(current.TaskDefinitionArn, &expect.TaskDefinitionArn) {
+	if !CompareString(&currTaskDefinitionArn, &expect.TaskDefinitionArn) {
 		fmt.Printf("      TaskDefinitionArn: %s  ->  %s\n", currTaskDefinitionArn, expect.TaskDefinitionArn)
 	}
 
-	if !CompareInt64(current.TaskCount, &expect.TaskCount) {
+	if current != nil && !CompareInt64(current.TaskCount, &expect.TaskCount) {
 		fmt.Printf("      TaskCount: %s  ->  %d\n", currTaskCount, expect.TaskCount)
 	}
 }
