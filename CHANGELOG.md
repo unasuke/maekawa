@@ -1,3 +1,8 @@
+## v0.5.0 (2017-06-14)
+- Support `--profile` option (#11)
+- Support `EcsParameters`, `KinesisParameters`, and `RoleArn` parameters in target (#11)
+- Follow govet(convert `Id` to `ID`) (#11)
+
 ## v0.4.0 (2017-03-16)
 - Update dependency packages (#5)
 - Cosmetic code (#6)
